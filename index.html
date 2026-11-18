@@ -1,0 +1,734 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, interactive-widget=resizes-content">
+<meta name="color-scheme" content="light dark">
+<meta name="theme-color" content="#EEF1FA" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#10162B" media="(prefers-color-scheme: dark)">
+<meta name="format-detection" content="telephone=no">
+<title>Unlock &amp; Color</title>
+<style>
+:root{color-scheme:light dark;--scrim:rgba(238,241,250,.62);--bg:#EEF1FA;--surface:#fff;--ink:#1B2440;--muted:#5A6482;--line:#C9D0E6;--accent:#3B5BFF;--on-accent:#fff;--good:#14866D;--bad:#C2362B;--key:#FFC93C;
+  box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--scrim:rgba(16,22,43,.62);--bg:#10162B;--surface:#1A2240;--ink:#EEF1FA;--muted:#9BA6CC;--line:#323C66;--accent:#7C93FF;--on-accent:#10162B;--good:#4CD3B0;--bad:#FF8A80}}
+:root[data-theme="light"]{color-scheme:light}
+:root[data-theme="dark"]{color-scheme:dark;--scrim:rgba(16,22,43,.62);--bg:#10162B;--surface:#1A2240;--ink:#EEF1FA;--muted:#9BA6CC;--line:#323C66;--accent:#7C93FF;--on-accent:#10162B;--good:#4CD3B0;--bad:#FF8A80}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}html,body{margin:0}
+html{-webkit-text-size-adjust:100%;text-size-adjust:100%;touch-action:manipulation;overscroll-behavior-y:contain}
+body{background:var(--bg);color:var(--ink);font-family:system-ui,-apple-system,"HarmonyOS Sans","Segoe UI",Roboto,"Noto Sans","Helvetica Neue",Arial,sans-serif;line-height:1.4}
+main{max-width:520px;margin:0 auto;padding:18px 16px 32px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.q,.opt,.sub,.hint,.tile span{overflow-wrap:break-word}
+h1{font-size:1.6rem;font-weight:800;margin:0 0 4px;letter-spacing:-.02em}
+.sub{color:var(--muted);margin:0 0 14px}
+.bar{display:flex;gap:4px;margin:0 0 16px}
+.pip{flex:1;height:8px;border-radius:4px;background:var(--line)}.pip.done{background:var(--key)}.pip.now{background:var(--accent)}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:18px}
+.grade{display:inline-block;background:var(--key);color:#1B2440;font-weight:700;border-radius:8px;padding:3px 10px;margin:0 0 10px;font-size:.9rem}
+.q{font-size:1.2rem;font-weight:700;margin:0 0 6px}
+pre{background:var(--bg);border-radius:10px;padding:12px;margin:10px 0;overflow-x:auto;font-size:.95rem;font-family:ui-monospace,"Roboto Mono","Noto Sans Mono","Droid Sans Mono",Menlo,Consolas,monospace;-webkit-user-select:text;user-select:text}
+.opts{display:grid;gap:10px;margin-top:14px}
+button{font:inherit;color:inherit;cursor:pointer;-webkit-user-select:none;user-select:none}
+.opt:active,.sw:active,.btn:not(:disabled):active{transform:scale(.97)}
+.opt{text-align:left;min-height:52px;padding:14px;border-radius:12px;border:2px solid var(--line);background:var(--surface);font-weight:500}
+.opt.right{border-color:var(--good)}.opt.wrong{border-color:var(--bad)}
+:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+.hint{min-height:1.4em;margin:12px 0 0;font-weight:500}
+.btn{background:var(--accent);color:var(--on-accent);border:0;border-radius:12px;padding:14px 18px;font-weight:700;width:100%;margin-top:12px}
+.lock{display:flex;align-items:center;gap:10px;margin-bottom:6px;font-weight:800;font-size:1.3rem}
+.key{width:36px;height:36px;border-radius:50%;background:var(--key);display:grid;place-items:center;color:#1B2440;font-size:1.1rem}
+svg{width:100%;height:auto;display:block;background:var(--bg);border-radius:14px;margin:10px 0;-webkit-user-select:none;user-select:none;-webkit-touch-callout:none}
+.reg{fill:var(--surface);stroke:var(--ink);stroke-width:2;cursor:pointer;transition:fill .25s}
+.lbl{fill:var(--muted);font:700 11px system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;text-anchor:middle;dominant-baseline:central;pointer-events:none}
+.pal{display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
+.sw{width:48px;height:48px;padding:0;border-radius:50%;border:3px solid var(--surface);box-shadow:0 0 0 1px var(--line);font-weight:800;font-size:1.1rem}
+.sw[aria-pressed="true"]{box-shadow:0 0 0 4px var(--accent)}
+.lsel{font:inherit;min-height:44px;color:var(--ink);background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:8px 10px;margin:0;min-width:0}
+.gbox .lsel{margin:0 0 10px;align-self:flex-start}
+.langrow{cursor:pointer}.langrow .lsel{flex:1;min-height:0;margin:0;border:0;background:transparent;font-weight:700;padding:0 4px}
+.top{display:flex;align-items:center;justify-content:space-between;gap:10px;margin:0 0 12px}
+.coins{display:flex;align-items:center;gap:8px;background:var(--surface);border:1px solid var(--line);border-radius:999px;padding:5px 14px 5px 6px;font-weight:800;font-size:1.1rem;flex:none}
+.coin{width:28px;height:28px;border-radius:50%;background:var(--key);color:#1B2440;display:grid;place-items:center;font-size:.95rem;box-shadow:inset 0 0 0 3px rgba(27,36,64,.18)}
+.coins.pop .coin{animation:pop .5s}
+@keyframes pop{0%{transform:scale(1)}40%{transform:scale(1.35) rotate(-12deg)}100%{transform:scale(1)}}
+@media (prefers-reduced-motion:reduce){.coins.pop .coin{animation:none}}
+body.locked main{opacity:.55;pointer-events:none;user-select:none}
+@media (hover:hover) and (pointer:fine){body.locked main{opacity:1;filter:blur(3px) saturate(.8)}}
+#gate{position:fixed;top:0;right:0;bottom:0;left:0;z-index:50;display:flex;align-items:center;justify-content:center;padding:calc(16px + env(safe-area-inset-top,0px)) 16px calc(16px + env(safe-area-inset-bottom,0px));background:var(--scrim)}
+.gbox{background:var(--surface);color:var(--ink);border:1px solid var(--line);border-radius:18px;padding:18px;width:100%;max-width:520px;max-height:100%;display:flex;flex-direction:column;box-shadow:0 10px 40px rgba(0,0,0,.25)}
+.gbox>*{flex-shrink:0}.gbox>.gtxt{flex:1 1 0;min-height:96px}.gbox>.lsel{flex:none}
+.gbox h2{margin:0 0 2px;font-size:1.35rem;font-weight:800}
+#gate{padding:calc(8px + env(safe-area-inset-top,0px)) 8px calc(8px + env(safe-area-inset-bottom,0px))}
+#gate .gbox{height:100%;max-height:900px;padding:14px}
+#gate .gtxt{font-size:1rem;line-height:1.45}
+#gate .gs{margin-bottom:6px}
+.gs{margin:0 0 10px;color:var(--muted)}
+.gtxt{overflow-y:auto;-webkit-overflow-scrolling:touch;overscroll-behavior:contain;border:1px solid var(--line);border-radius:12px;padding:12px;background:var(--bg);font-size:.9rem;min-height:0;flex:1}
+.gtxt h3{font-size:.95rem;margin:12px 0 4px}.gtxt h3:first-child{margin-top:0}
+.gtxt p,.gtxt ul{margin:0 0 6px}.gtxt ul{padding-left:20px}
+.gck{display:flex;gap:10px;align-items:flex-start;margin:12px 0 0;font-weight:500;cursor:pointer}
+.gck input{width:22px;height:22px;margin:1px 0 0;flex:none;accent-color:var(--accent)}
+.btn:disabled{opacity:.45;cursor:not-allowed}
+.hide{display:none!important}
+/* smooth transitions */
+@keyframes ucIn{from{opacity:0;transform:translateY(14px) scale(.985)}to{opacity:1;transform:none}}
+@keyframes ucFade{from{opacity:0}to{opacity:1}}
+@keyframes ucOut{from{opacity:1}to{opacity:0}}
+#puzzle,#draw,.ov .gbox,#gate .gbox{animation:ucIn .45s cubic-bezier(.2,.8,.2,1) both}
+.ov,#gate{animation:ucFade .35s ease both}
+#gate.out{animation:ucOut .3s ease forwards;pointer-events:none}
+main{transition:opacity .45s ease,filter .45s ease}
+.opt,.sw,.btn,.pip,.tile,.link,.prov{transition:transform .15s ease,border-color .25s ease,background-color .25s ease,box-shadow .25s ease,opacity .25s ease}
+@media (prefers-reduced-motion:reduce){#puzzle,#draw,.ov,.ov .gbox,#gate,#gate .gbox,#gate.out{animation:none!important}main,.opt,.sw,.btn,.pip,.tile,.link,.prov{transition:none!important}}
+.ov{position:fixed;top:0;right:0;bottom:0;left:0;z-index:60;display:flex;align-items:center;justify-content:center;padding:calc(16px + env(safe-area-inset-top,0px)) 16px calc(16px + env(safe-area-inset-bottom,0px));background:var(--scrim)}
+.ov .gbox{overflow-y:auto;-webkit-overflow-scrolling:touch;overscroll-behavior:contain}
+.seg{display:flex;background:var(--bg);border-radius:12px;padding:4px;gap:4px;margin:0 0 12px}
+.seg button{flex:1;min-height:44px;border:0;border-radius:9px;padding:10px;font-weight:700;background:transparent}
+.seg button[aria-selected="true"]{background:var(--surface);box-shadow:0 1px 3px rgba(0,0,0,.2)}
+.prov{display:flex;align-items:center;justify-content:center;gap:10px;width:100%;min-height:48px;padding:13px;border-radius:12px;border:1.5px solid var(--line);background:var(--surface);font-weight:700;margin:0 0 10px}
+.prov svg{width:20px;height:20px;margin:0;background:none;border-radius:0;flex:none}
+.prov.apple{background:#000;color:#fff;border-color:#555}
+.or{display:flex;align-items:center;gap:10px;color:var(--muted);margin:6px 0 10px;font-size:.85rem}
+.or::before,.or::after{content:"";flex:1;height:1px;background:var(--line)}
+.fld{display:block;margin:0 0 10px;font-weight:700;font-size:.9rem}
+.fld input{display:block;width:100%;margin-top:4px;font:inherit;font-size:1rem;color:var(--ink);background:var(--bg);border:1.5px solid var(--line);border-radius:10px;padding:12px}
+.err{min-height:1.3em;margin:2px 0 0;color:var(--bad);font-weight:500;font-size:.9rem}
+.link{background:none;border:0;color:var(--accent);font-weight:700;padding:10px;min-height:48px;text-decoration:underline;width:100%;text-align:center}
+.small{font-size:.8rem;color:var(--muted);margin:0;text-align:center}
+.chip{display:flex;align-items:center;gap:8px;background:var(--surface);border:1px solid var(--line);border-radius:999px;padding:5px 14px 5px 6px;font-weight:700;margin:0 0 14px;max-width:100%}
+.av{width:28px;height:28px;border-radius:50%;background:var(--accent);color:var(--on-accent);display:grid;place-items:center;flex:none;font-size:.9rem;overflow:hidden}.av img{width:100%;height:100%;object-fit:cover;display:block}.av.big{width:64px;height:64px;font-size:1.6rem;font-weight:800}#picrow{display:flex;align-items:center;gap:14px;margin:0 0 10px}#picrow .link{text-align:left;padding:4px 0;min-height:40px;width:auto;display:block}
+.nm{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;min-width:0}
+.sg{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:0 0 6px}
+.tile{background:var(--bg);border-radius:12px;padding:10px 12px}
+.tile b{display:block;font-size:1.4rem}.tile span{color:var(--muted);font-size:.8rem}
+/* Older WebViews (Chromium < 88, e.g. EMUI 9-11 Huawei Browser): no flex gap -> use margins */
+@supports not (aspect-ratio:1/1){
+ .bar,.pal,.lock,.top,.coins,.chip,.prov,.or,.seg,.gck,#picrow{gap:0}
+ .pip+.pip{margin-left:4px}
+ .pal{margin:-5px}.sw{margin:5px}
+ .lock>*+*,.top>*+*,.prov>*+*,.gck>*+*{margin-left:10px}
+ .coins>*+*,.chip>*+*{margin-left:8px}
+ .seg>*+*{margin-left:4px}
+ #picrow>*+*{margin-left:14px}
+ .prov.langrow>.lsel{margin-left:10px}
+ .or::before{margin-right:10px}.or::after{margin-left:10px}
+}
+</style>
+</head>
+<body class="locked">
+<main>
+  <div class="top">
+  <select id="lang" class="lsel" aria-label="Language"><option value="en">English</option><option value="de">Deutsch</option><option value="fr">Français</option><option value="it">Italiano (Svizzera)</option><option value="es">Español</option><option value="no">Norsk</option><option value="sv">Svenska</option><option value="nl">Nederlands</option><option value="pt">Português</option><option value="gsw">Schwiizertüütsch (Swiss)</option></select>
+  <div class="coins" id="coinbox" role="status" aria-label="Coins"><span class="coin" aria-hidden="true">★&#xFE0E;</span><span id="coins">0</span></div>
+  </div>
+  <button class="chip" id="me" type="button" aria-label="Your stats"><span class="av" id="av" aria-hidden="true"></span><span class="nm" id="mename"></span><span data-i="s_chip" data-pre="· " style="color:var(--muted);font-weight:500">· Stats</span></button>
+  <h1 id="h1">Unlock &amp; Color</h1>
+  <p class="sub" id="sub"></p>
+  <div class="bar" id="bar" aria-label="Progress"></div>
+
+  <section id="puzzle" class="card">
+    <span class="grade" id="grade"></span>
+    <p class="q" id="q"></p>
+    <pre id="code" class="hide"></pre>
+    <div class="opts" id="opts"></div>
+    <p class="hint" id="hint" aria-live="polite"></p>
+  </section>
+
+  <section id="draw" class="card hide">
+    <div class="lock"><span class="key" aria-hidden="true">✦&#xFE0E;</span><span id="title"></span></div>
+    <p class="hint" id="dhint" aria-live="polite"></p>
+    <svg id="art" viewBox="0 0 200 200" role="img" aria-label="Color by number picture"></svg>
+    <div class="pal" id="pal"></div>
+    <button class="btn hide" id="next">Next puzzle</button>
+  </section>
+</main>
+
+<div id="gate" role="dialog" aria-modal="true" aria-labelledby="gt">
+  <div class="gbox">
+    <select class="lsel" aria-label="Language"></select>
+    <h2 id="gt">Terms of Service</h2>
+    <p class="gs" data-i="tos_s">Please read and accept to start playing.</p>
+    <div class="gtxt" lang="en" tabindex="0">
+      <p><em>Last updated: November 17, 2026</em></p>
+      <p>These Terms apply to your use of Unlock &amp; Color (the “Game”), provided by Techno Creative Company (“we”, “us”). By using the Game you agree to them. If you are under 18, please ask a parent or guardian to read them with you.</p>
+      <h3>1. What the Game is</h3>
+      <p>Unlock &amp; Color is a free educational game. Players answer puzzles from first grade to college level, and each correct answer unlocks a color-by-number picture. The Game may include virtual coins. Coins are only a fun score inside the Game: they have no monetary value, cannot be bought, sold, transferred or exchanged for money or anything else, and may be reset or removed at any time. The Game is meant for fun and general learning, not as a school curriculum or a test.</p>
+      <h3>2. Who can use it</h3>
+      <p>The Game is for all ages. Players under 18 should use it with the permission of a parent or guardian. You do not need an account to play: you can play as a guest. You can optionally create an account (with email, Google or Apple) to save your progress and stats.</p>
+      <h3>3. Your information</h3>
+      <ul>
+        <li>You can play as a guest without giving any personal information. If you create an account, the Game stores your name, your email address (or the user ID that Google or Apple provides), an optional profile picture (accounts only, not guests), and your progress, coins and statistics. In this version of the Game this is saved only on your own device, in your browser’s local storage; it is not sent to our servers. Any personal data is handled in line with the Swiss Federal Act on Data Protection (FADP).</li>
+        <li>If you sign in with Google or Apple, you are taken to that provider, which handles your login under its own privacy policy and tells the Game your name, email address and a user ID. We never see your Google or Apple password. For email accounts, your password is stored on your device only in scrambled (hashed) form.</li>
+        <li>You can log out, or delete your account and all its saved data, at any time from the Stats screen. Clearing your browser data also removes it.</li>
+        <li>Your browser may save your language choice, your coin score, any translations you requested, and your acceptance of these Terms on your own device (local storage). This is only used to make the Game work and remember your choices. You can clear it at any time in your browser settings.</li>
+        <li>Some languages are translated automatically on request. Only the Game’s own text is sent for translation; the Game has no text boxes, so nothing you type is sent. The translation service may process this text outside Switzerland.</li>
+        <li>The Game is hosted by a third-party web host, which may collect technical information such as your IP address under its own privacy policy. This may involve processing outside Switzerland.</li>
+      </ul>
+      <h3>4. Acceptable use</h3>
+      <p>Please do not try to break, overload, or interfere with the Game, copy it and present it as your own work, or use it for anything unlawful. Usernames must not contain racist, hateful or discriminatory language; we may reject or remove such names. You may play it, share the link, and use it in classrooms or at home for non-commercial purposes.</p>
+      <h3>5. Ownership</h3>
+      <p>The Game’s code, puzzles, pictures, and design belong to Techno Creative Company, except for third-party tools, which belong to their owners. You may not sell the Game or its content without our written permission.</p>
+      <h3>6. Accuracy and translations</h3>
+      <p>We try to make the puzzles correct and fair, but mistakes can happen. Automatic translations may contain errors or awkward wording. The Game is not a substitute for professional teaching or advice.</p>
+      <h3>7. No warranty</h3>
+      <p>The Game is provided “as is” and “as available”, with no promise that it will always work, be error-free, or be available. We may change, pause, or remove it at any time.</p>
+      <h3>8. Limit of liability</h3>
+      <p>To the extent permitted by Swiss law, we are not liable for any loss or damage from using the Game, which is offered free of charge. We remain liable for damage caused by unlawful intent or gross negligence, for injury to life or health, and wherever liability cannot be excluded or limited under mandatory law (for example, the Swiss Product Liability Act).</p>
+      <h3>9. Changes</h3>
+      <p>We may update these Terms from time to time. If you keep using the Game after an update, you accept the new Terms. If any part of these Terms is invalid or unenforceable, the rest stays in force.</p>
+      <h3>10. Governing law</h3>
+      <p>These Terms are governed by Swiss substantive law, excluding its conflict-of-law rules and the UN Convention on Contracts for the International Sale of Goods. Unless mandatory law provides otherwise (in particular for consumers, who may be able to bring a claim at their place of residence), the courts at our registered seat in Switzerland have exclusive jurisdiction.</p>
+      <h3>11. Contact</h3>
+      <p>Questions? Contact Techno Creative Company, Switzerland, at technocreativecompany@gmail.com.</p>
+    </div>
+    <p class="gs" data-i="tos_f" style="margin:12px 0 0">By tapping “Accept &amp; play” you agree to these Terms (or your parent or guardian has, for you).</p>
+    <button class="btn" id="gbtn" type="button">Accept &amp; play</button>
+  </div>
+</div>
+
+<div id="auth" class="ov hide" role="dialog" aria-modal="true" aria-labelledby="at">
+  <div class="gbox">
+    <h2 id="at">Create your account</h2>
+    <p class="gs" id="asub">Save your progress, coins and stats.</p>
+    <div class="seg" role="tablist"><button id="tabc" type="button" role="tab" aria-selected="true">Create account</button><button id="tabl" type="button" role="tab" aria-selected="false">Log in</button></div>
+    <div id="nrow"><label class="fld" style="margin-bottom:4px"><span data-i="a_un">Username</span><input id="aname" type="text" autocomplete="nickname" autocapitalize="words" autocorrect="off" spellcheck="false" enterkeyhint="done" maxlength="20" data-ip="a_ph" placeholder="3–20 characters"></label><p class="small" data-i="a_hint" style="text-align:left;margin:0 0 12px">Needed for guests and new accounts. Please keep it kind: no racist, hateful or discriminatory names.</p></div>
+    <label class="prov langrow"><span aria-hidden="true">🌐</span><select class="lsel" aria-label="Language"></select></label>
+    <button class="prov" id="bg" type="button"><svg viewBox="0 0 48 48" aria-hidden="true"><path fill="#EA4335" d="M24 9.5c3.5 0 6.6 1.2 9.1 3.6l6.8-6.8C35.8 2.4 30.3 0 24 0 14.6 0 6.5 5.4 2.6 13.2l7.9 6.1C12.4 13.6 17.7 9.5 24 9.5z"/><path fill="#4285F4" d="M46.5 24.5c0-1.6-.1-3.1-.4-4.5H24v9h12.7c-.6 3-2.3 5.5-4.8 7.2l7.5 5.8c4.4-4.1 7.1-10.1 7.1-17.5z"/><path fill="#FBBC05" d="M10.5 28.7a14.5 14.5 0 0 1 0-9.4l-7.9-6.1a24 24 0 0 0 0 21.6l7.9-6.1z"/><path fill="#34A853" d="M24 48c6.5 0 11.9-2.1 15.9-5.8l-7.5-5.8c-2.1 1.4-4.9 2.3-8.4 2.3-6.3 0-11.6-4.1-13.5-9.8l-7.9 6.1C6.5 42.6 14.6 48 24 48z"/></svg><span id="bgt">Sign up with Google</span></button>
+    <button class="prov apple" id="ba" type="button"><svg viewBox="0 0 24 24" aria-hidden="true" fill="#fff"><path d="M16.365 1.43c0 1.14-.493 2.27-1.177 3.08-.744.9-1.99 1.57-2.987 1.57-.12 0-.23-.02-.3-.03-.01-.06-.04-.22-.04-.39 0-1.15.572-2.27 1.206-2.98.804-.94 2.142-1.64 3.248-1.68.03.13.05.28.05.43zm4.565 15.71c-.03.07-.463 1.58-1.518 3.12-.945 1.34-1.94 2.71-3.43 2.71-1.517 0-1.9-.88-3.63-.88-1.698 0-2.302.91-3.67.91-1.377 0-2.332-1.26-3.428-2.8-1.287-1.82-2.323-4.63-2.323-7.28 0-4.28 2.797-6.55 5.552-6.55 1.448 0 2.675.95 3.6.95.865 0 2.222-1.01 3.902-1.01.613 0 2.886.06 4.374 2.19-.13.09-2.383 1.37-2.383 4.19 0 3.26 2.854 4.42 2.955 4.45z"/></svg><span id="bat">Sign up with Apple</span></button>
+    <div class="or" data-i="a_or">or with email</div>
+    <form id="af" novalidate>
+      <label class="fld"><span data-i="a_em">Email</span><input id="aemail" type="email" autocomplete="email" inputmode="email" autocapitalize="off" autocorrect="off" spellcheck="false" enterkeyhint="next" maxlength="120"></label>
+      <label class="fld"><span data-i="a_pw">Password</span><input id="apw" type="password" autocomplete="new-password" autocapitalize="off" enterkeyhint="go" maxlength="100"></label>
+      <p class="err" id="aerr" role="alert"></p>
+      <button class="btn" id="asubmit" type="submit" style="margin-top:4px">Create account</button>
+    </form>
+    <button class="link" id="aguest" type="button">Continue as guest</button>
+    <p class="small" data-i="a_dev">Accounts are saved on this device only.</p>
+  </div>
+</div>
+
+<div id="stats" class="ov hide" role="dialog" aria-modal="true" aria-labelledby="st">
+  <div class="gbox">
+    <h2 id="st">Your stats</h2>
+    <p class="gs" id="who"></p>
+    <div id="picrow" class="hide"><span class="av big" id="bigav" aria-hidden="true"></span><div><button class="link" id="pchange" type="button">Change picture</button><button class="link" id="premove" type="button">Remove picture</button></div><input id="pfile" type="file" accept="image/*" hidden></div>
+    <p class="err" id="perr" role="alert"></p>
+    <div class="sg" id="sg"></div>
+    <button class="btn" id="sclose" type="button">Close</button>
+    <button class="link" id="slogout" type="button">Log out</button>
+    <button class="link" id="sdel" type="button" style="color:var(--bad)">Delete account &amp; data</button>
+  </div>
+</div>
+
+<div id="pp" class="ov hide" role="dialog" aria-modal="true" aria-labelledby="ppt">
+  <div class="gbox" style="text-align:center">
+    <span class="av big" id="ppav" aria-hidden="true" style="margin:0 auto 12px"></span>
+    <h2 id="ppt"></h2>
+    <p class="gs" id="pps"></p>
+    <button class="btn" id="ppadd" type="button"></button>
+    <button class="link" id="ppskip" type="button"></button>
+    <p class="err" id="pperr" role="alert"></p>
+    <input id="pfile3" type="file" accept="image/*" hidden>
+  </div>
+</div>
+
+<script>
+if(!Object.fromEntries)Object.fromEntries=function(e){var o={};for(var p of e)o[p[0]]=p[1];return o};
+const PUZZLES=[
+ {g:"First grade",q:"Which one of these is a computer?",o:["Banana","Shoe","Laptop","Spoon"],a:2},
+ {g:"Second grade",q:"A robot takes 3 steps forward, then 2 steps back. How far is it from where it started?",o:["1 step","2 steps","3 steps","5 steps"],a:0},
+ {g:"Third grade",q:"The robot beeps: beep, boop, beep, boop, beep… What comes next?",o:["Beep","Boop","Bop","Silence"],a:1},
+ {g:"Fourth grade",q:"What is the “brain” of a computer called?",o:["Monitor","Mouse","Speaker","CPU"],a:3},
+ {g:"Fifth grade",q:"Computers count with only 0 and 1. Counting goes 0, 1, 10, 11… What number is 10 in this code?",o:["Two","Ten","Eleven","One hundred"],a:0},
+ {g:"Sixth grade",q:"A loop repeats code. How many times does this print hello?",c:"repeat 4 times:\n    print(\"hello\")",o:["1","3","4","5"],a:2},
+ {g:"Seventh grade",q:"What does this code print?",c:"x = 3\nx = x * 2 + 1\nprint(x)",o:["6","7","9","10"],a:1},
+ {g:"Eighth grade",q:"What is the binary number 1011 in decimal?",o:["9","11","13","15"],a:1},
+ {g:"Ninth grade",q:"Spot the bug:",c:"if (x = 5) {\n  celebrate();\n}",o:["Missing semicolon","It assigns instead of compares","Bad function name","Braces are wrong"],a:1},
+ {g:"Tenth grade",q:"What does f(5) return?",c:"def f(n):\n    return n if n < 2 else f(n-1) + f(n-2)",o:["3","5","8","13"],a:1},
+ {g:"Eleventh grade",q:"Which data structure is first in, first out?",o:["Stack","Queue","Tree","Array"],a:1},
+ {g:"Twelfth grade",q:"What does DNS do?",o:["Encrypts passwords","Turns site names into IP addresses","Speeds up Wi-Fi","Stores your emails"],a:1},
+ {g:"College",q:"How fast is binary search on a sorted list of n items?",o:["O(n)","O(n²)","O(log n)","O(1)"],a:2}
+];
+const COLORS=["#3B82F6","#FACC15","#FB923C","#22C55E","#EF4444","#A855F7"];
+const TXT=["#fff","#1B2440","#1B2440","#1B2440","#fff","#fff"];
+const PICS=[
+ {name:"Bird",r:[
+  ['<ellipse cx="45" cy="100" rx="30" ry="10" transform="rotate(-25 45 100)"/>',4,42,104],
+  ['<ellipse cx="40" cy="125" rx="30" ry="10"/>',5,38,125],
+  ['<ellipse cx="45" cy="150" rx="30" ry="10" transform="rotate(25 45 150)"/>',6,45,146],
+  ['<ellipse cx="100" cy="120" rx="45" ry="35"/>',1,90,135],
+  ['<ellipse cx="105" cy="115" rx="25" ry="14" transform="rotate(-10 105 115)"/>',5,105,115],
+  ['<circle cx="150" cy="85" r="22"/>',2,150,85],
+  ['<polygon points="170,82 192,90 170,98"/>',3,177,90]]},
+ {name:"Fish",r:[
+  ['<polygon points="150,100 190,70 190,130"/>',5,176,100],
+  ['<polygon points="75,68 110,68 92,42"/>',6,92,62],
+  ['<polygon points="85,130 112,130 96,152"/>',2,97,136],
+  ['<ellipse cx="95" cy="100" rx="55" ry="35"/>',3,110,105],
+  ['<circle cx="65" cy="92" r="9"/>',1,65,92],
+  ['<circle cx="38" cy="60" r="9"/>',1,38,60],
+  ['<circle cx="24" cy="38" r="9"/>',1,24,38],
+  ['<rect x="150" y="150" width="12" height="40"/>',4,156,170],
+  ['<rect x="170" y="160" width="12" height="30"/>',4,176,175],
+  ['<rect x="0" y="188" width="200" height="12"/>',2,100,194]]},
+ {name:"House",r:[
+  ['<rect x="135" y="45" width="16" height="30"/>',6,143,60],
+  ['<rect x="40" y="90" width="120" height="80"/>',2,60,155],
+  ['<polygon points="30,90 100,35 170,90"/>',5,100,72],
+  ['<rect x="88" y="120" width="26" height="50"/>',3,101,145],
+  ['<rect x="52" y="105" width="26" height="26"/>',1,65,118],
+  ['<rect x="122" y="105" width="26" height="26"/>',1,135,118],
+  ['<rect x="0" y="170" width="200" height="25"/>',4,20,183],
+  ['<circle cx="28" cy="162" r="14"/>',4,28,162],
+  ['<circle cx="172" cy="162" r="14"/>',4,172,162]]},
+ {name:"Rocket",r:[
+  ['<polygon points="72,120 45,165 72,150"/>',5,66,141],
+  ['<polygon points="128,120 155,165 128,150"/>',5,134,141],
+  ['<polygon points="85,155 100,192 115,155"/>',3,100,168],
+  ['<ellipse cx="100" cy="100" rx="28" ry="55"/>',1,100,135],
+  ['<polygon points="73,72 100,25 127,72"/>',5,100,60],
+  ['<circle cx="100" cy="100" r="13"/>',2,100,100],
+  ['<circle cx="35" cy="40" r="8"/>',6,35,40],
+  ['<circle cx="165" cy="60" r="8"/>',6,165,60],
+  ['<circle cx="160" cy="150" r="8"/>',6,160,150]]},
+ {name:"Flower",r:[
+  ['<rect x="96" y="100" width="8" height="75"/>',4,100,150],
+  ['<ellipse cx="76" cy="138" rx="18" ry="8" transform="rotate(-30 76 138)"/>',4,76,138],
+  ['<polygon points="68,165 132,165 124,196 76,196"/>',3,100,181],
+  ['<circle cx="100" cy="46" r="22"/>',5,100,38],
+  ['<circle cx="100" cy="104" r="22"/>',5,100,115],
+  ['<circle cx="70" cy="75" r="22"/>',6,58,75],
+  ['<circle cx="130" cy="75" r="22"/>',6,142,75],
+  ['<circle cx="100" cy="75" r="14"/>',2,100,75]]}
+];
+let lang="en";
+const UI={
+ gsw:{title:"Freischalte & Aamale",sub:"Löse es Rätsel vo der 1. Klass bis zur Uni. Jede Sieg schaltet es Mal-nach-Zahle-Bild frei.",ok:"Richtig! Dis Bild wird freigschaltet…",no:"Nöd ganz. Probier e anderi Antwort.",unlocked:"Freigschaltet:",names:["Vogel","Fisch","Huus","Rakete","Blueme"],pick:"Wähl e Farb und tipp denn uf d Zahl. {0} vo {1} aagmalt.",done:"Fertig! Super gmacht.",wrong:"Das Fäld isch d Nummere {0}. Wähl d Farb {0}.",next:"Nächschts Rätsel",again:"Nomal spiele",color:"Farb",college:"Uni"},
+ en:{title:"Unlock & Color",sub:"Solve a puzzle from first grade up to college. Each win unlocks a color-by-number picture.",ok:"Correct! Unlocking your picture…",no:"Not quite. Try another answer.",unlocked:"Unlocked:",names:["Bird","Fish","House","Rocket","Flower"],pick:"Pick a color, then tap its number. {0} of {1} filled.",done:"Finished! Great work.",wrong:"That space is number {0}. Pick color {0}.",next:"Next puzzle",again:"Play again",color:"Color",college:"College"},
+ de:{title:"Lösen & Ausmalen",sub:"Löse ein Rätsel von der 1. Klasse bis zur Uni. Jeder Sieg schaltet ein Malen-nach-Zahlen-Bild frei.",ok:"Richtig! Dein Bild wird freigeschaltet…",no:"Nicht ganz. Probier eine andere Antwort.",unlocked:"Freigeschaltet:",names:["Vogel","Fisch","Haus","Rakete","Blume"],pick:"Wähle eine Farbe und tippe dann auf die Zahl. {0} von {1} ausgemalt.",done:"Fertig! Super gemacht.",wrong:"Dieses Feld ist die Nummer {0}. Wähle Farbe {0}.",next:"Nächstes Rätsel",again:"Nochmal spielen",color:"Farbe",college:"Uni"},
+ fr:{title:"Débloque & Colorie",sub:"Résous une énigme de la 1re année jusqu’à l’université. Chaque victoire débloque un coloriage par numéros.",ok:"Bravo ! Ton image se débloque…",no:"Pas tout à fait. Essaie une autre réponse.",unlocked:"Débloqué :",names:["Oiseau","Poisson","Maison","Fusée","Fleur"],pick:"Choisis une couleur, puis touche son numéro. {0} sur {1} coloriées.",done:"Terminé ! Bravo.",wrong:"Cette zone porte le numéro {0}. Choisis la couleur {0}.",next:"Énigme suivante",again:"Rejouer",color:"Couleur",college:"Université"},
+ it:{title:"Sblocca e Colora",sub:"Risolvi un enigma dalla prima classe fino all’università. Ogni vittoria sblocca un disegno da colorare con i numeri.",ok:"Esatto! Sblocco il tuo disegno…",no:"Non proprio. Prova un’altra risposta.",unlocked:"Sbloccato:",names:["Uccello","Pesce","Casa","Razzo","Fiore"],pick:"Scegli un colore, poi tocca il numero. {0} su {1} colorate.",done:"Finito! Ottimo lavoro.",wrong:"Questa zona è il numero {0}. Scegli il colore {0}.",next:"Prossimo enigma",again:"Gioca ancora",color:"Colore",college:"Università"},
+ es:{title:"Desbloquea y Colorea",sub:"Resuelve un acertijo desde primer grado hasta la universidad. Cada acierto desbloquea un dibujo para colorear por números.",ok:"¡Correcto! Desbloqueando tu dibujo…",no:"No del todo. Prueba otra respuesta.",unlocked:"Desbloqueado:",names:["Pájaro","Pez","Casa","Cohete","Flor"],pick:"Elige un color y toca su número. {0} de {1} coloreadas.",done:"¡Terminado! Buen trabajo.",wrong:"Esta zona es el número {0}. Elige el color {0}.",next:"Siguiente acertijo",again:"Jugar otra vez",color:"Color",college:"Universidad"},
+ no:{title:"Lås opp og fargelegg",sub:"Løs en gåte fra 1. klasse til universitetet. Hver seier låser opp et fargelegg-etter-tall-bilde.",ok:"Riktig! Låser opp bildet ditt…",no:"Ikke helt. Prøv et annet svar.",unlocked:"Låst opp:",names:["Fugl","Fisk","Hus","Rakett","Blomst"],pick:"Velg en farge, og trykk på tallet. {0} av {1} fargelagt.",done:"Ferdig! Godt jobbet.",wrong:"Dette feltet er nummer {0}. Velg farge {0}.",next:"Neste gåte",again:"Spill igjen",color:"Farge",college:"Universitet"},
+ sv:{title:"Lås upp och färglägg",sub:"Lös en gåta från årskurs 1 till universitetet. Varje vinst låser upp en måla-efter-siffror-bild.",ok:"Rätt! Låser upp din bild…",no:"Inte riktigt. Försök med ett annat svar.",unlocked:"Upplåst:",names:["Fågel","Fisk","Hus","Raket","Blomma"],pick:"Välj en färg och tryck på siffran. {0} av {1} ifyllda.",done:"Klart! Bra jobbat.",wrong:"Den här ytan är nummer {0}. Välj färg {0}.",next:"Nästa gåta",again:"Spela igen",color:"Färg",college:"Universitet"},
+ nl:{title:"Ontgrendel en kleur",sub:"Los een puzzel op van groep 1 tot de universiteit. Elke winst ontgrendelt een kleur-op-nummer-plaat.",ok:"Goed! Je plaat wordt ontgrendeld…",no:"Net niet. Probeer een ander antwoord.",unlocked:"Ontgrendeld:",names:["Vogel","Vis","Huis","Raket","Bloem"],pick:"Kies een kleur en tik op het nummer. {0} van {1} gekleurd.",done:"Klaar! Goed gedaan.",wrong:"Dit vlak is nummer {0}. Kies kleur {0}.",next:"Volgende puzzel",again:"Opnieuw spelen",color:"Kleur",college:"Universiteit"},
+ pt:{title:"Desbloqueie e Colora",sub:"Resolva um enigma do 1º ano até a faculdade. Cada vitória desbloqueia um desenho para colorir por números.",ok:"Certo! Desbloqueando seu desenho…",no:"Quase. Tente outra resposta.",unlocked:"Desbloqueado:",names:["Pássaro","Peixe","Casa","Foguete","Flor"],pick:"Escolha uma cor e toque no número. {0} de {1} coloridas.",done:"Pronto! Bom trabalho.",wrong:"Esta área é o número {0}. Escolha a cor {0}.",next:"Próximo enigma",again:"Jogar de novo",color:"Cor",college:"Faculdade"}
+};
+const G={gsw:n=>n+". Klass",de:n=>n+". Klasse",fr:n=>(n==1?"1re":n+"e")+" année",it:n=>"Classe "+n,es:n=>n+".º grado",no:n=>n+". klasse",sv:n=>"Årskurs "+n,nl:n=>"Leerjaar "+n,pt:n=>n+"º ano"};
+const TR={
+ gsw:[["Wele vo dene isch en Computer?",["Banane","Schueh","Laptop","Löffel"]],["En Roboter macht 3 Schritt vorwärts und denn 2 zrugg. Wie wit isch er vom Start wäg?",["1 Schritt","2 Schritt","3 Schritt","5 Schritt"]],["De Roboter piepst: Piep, Pup, Piep, Pup, Piep… Was chunnt als Nächschts?",["Piep","Pup","Pop","Stilli"]],["Wie heisst s «Hirni» vomene Computer?",["Bildschirm","Muus","Lautsprecher","CPU"]],["Computer zähled nur mit 0 und 1: 0, 1, 10, 11… Weli Zahl isch 10 i dem Code?",["Zwei","Zehn","Elf","Hundert"]],["E Schlaufe widerholt Code. Wie mängisch git das hello us?"],["Was git dä Code us?"],["Was isch d Binärzahl 1011 im Dezimalsystem?"],["Find de Fehler:",["Semikolon fehlt","Er wiist zue statt z vergliiche","Schlechte Funktionsname","D Klammere stimmed nöd"]],["Was git f(5) zrugg?"],["Weli Datestruktur schafft nach «first in, first out»?",["Stapel","Warteschlange","Baum","Array"]],["Was macht DNS?",["Verschlüsslet Passwörter","Macht us Websiite-Näme IP-Adrässe","Macht s WLAN schneller","Speicheret dini E-Mails"]],["Wie schnäll isch d binär Suechi i ere sortierte Lischte mit n Elemänt?"]],
+ de:[["Welches davon ist ein Computer?",["Banane","Schuh","Laptop","Löffel"]],["Ein Roboter macht 3 Schritte vor und 2 zurück. Wie weit ist er vom Start entfernt?",["1 Schritt","2 Schritte","3 Schritte","5 Schritte"]],["Der Roboter piepst: Piep, Pup, Piep, Pup, Piep… Was kommt als Nächstes?",["Piep","Pup","Pop","Stille"]],["Wie heisst das „Gehirn“ eines Computers?",["Bildschirm","Maus","Lautsprecher","CPU"]],["Computer zählen nur mit 0 und 1: 0, 1, 10, 11… Welche Zahl ist 10 in diesem Code?",["Zwei","Zehn","Elf","Hundert"]],["Eine Schleife wiederholt Code. Wie oft gibt das hello aus?"],["Was gibt dieser Code aus?"],["Was ist die Binärzahl 1011 im Dezimalsystem?"],["Finde den Fehler:",["Semikolon fehlt","Es weist zu statt zu vergleichen","Schlechter Funktionsname","Klammern sind falsch"]],["Was gibt f(5) zurück?"],["Welche Datenstruktur arbeitet nach „first in, first out“?",["Stapel","Warteschlange","Baum","Array"]],["Was macht DNS?",["Verschlüsselt Passwörter","Wandelt Websitenamen in IP-Adressen um","Beschleunigt das WLAN","Speichert deine E-Mails"]],["Wie schnell ist die binäre Suche in einer sortierten Liste mit n Elementen?"]],
+ fr:[["Lequel de ces objets est un ordinateur ?",["Banane","Chaussure","Ordinateur portable","Cuillère"]],["Un robot avance de 3 pas, puis recule de 2. À quelle distance est-il de son point de départ ?",["1 pas","2 pas","3 pas","5 pas"]],["Le robot fait : bip, boup, bip, boup, bip… Que vient ensuite ?",["Bip","Boup","Bop","Silence"]],["Comment appelle-t-on le « cerveau » d’un ordinateur ?",["Écran","Souris","Haut-parleur","CPU"]],["Les ordinateurs comptent avec 0 et 1 : 0, 1, 10, 11… Quel nombre est 10 dans ce code ?",["Deux","Dix","Onze","Cent"]],["Une boucle répète du code. Combien de fois affiche-t-il hello ?"],["Qu’affiche ce code ?"],["Quel est le nombre binaire 1011 en décimal ?"],["Trouve le bug :",["Point-virgule manquant","Il affecte au lieu de comparer","Mauvais nom de fonction","Les accolades sont fausses"]],["Que renvoie f(5) ?"],["Quelle structure de données fonctionne en « premier entré, premier sorti » ?",["Pile","File","Arbre","Tableau"]],["À quoi sert le DNS ?",["Chiffrer les mots de passe","Traduire les noms de sites en adresses IP","Accélérer le Wi-Fi","Stocker tes e-mails"]],["Quelle est la complexité de la recherche binaire dans une liste triée de n éléments ?"]],
+ it:[["Quale di questi è un computer?",["Banana","Scarpa","Portatile","Cucchiaio"]],["Un robot fa 3 passi avanti e poi 2 indietro. Quanto è lontano dal punto di partenza?",["1 passo","2 passi","3 passi","5 passi"]],["Il robot fa: bip, bup, bip, bup, bip… Cosa viene dopo?",["Bip","Bup","Bop","Silenzio"]],["Come si chiama il «cervello» di un computer?",["Schermo","Mouse","Altoparlante","CPU"]],["I computer contano solo con 0 e 1: 0, 1, 10, 11… Quale numero è 10 in questo codice?",["Due","Dieci","Undici","Cento"]],["Un ciclo ripete il codice. Quante volte stampa hello?"],["Cosa stampa questo codice?"],["Qual è il numero binario 1011 in decimale?"],["Trova l’errore:",["Manca il punto e virgola","Assegna invece di confrontare","Nome di funzione sbagliato","Le parentesi graffe sono sbagliate"]],["Cosa restituisce f(5)?"],["Quale struttura dati funziona «first in, first out»?",["Pila","Coda","Albero","Array"]],["A cosa serve il DNS?",["Cifra le password","Trasforma i nomi dei siti in indirizzi IP","Velocizza il Wi-Fi","Conserva le tue e-mail"]],["Quanto è veloce la ricerca binaria in una lista ordinata di n elementi?"]],
+ es:[["¿Cuál de estos es una computadora?",["Plátano","Zapato","Portátil","Cuchara"]],["Un robot da 3 pasos adelante y luego 2 atrás. ¿A cuántos pasos está de donde empezó?",["1 paso","2 pasos","3 pasos","5 pasos"]],["El robot suena: bip, bup, bip, bup, bip… ¿Qué sigue?",["Bip","Bup","Bop","Silencio"]],["¿Cómo se llama el «cerebro» de una computadora?",["Pantalla","Ratón","Altavoz","CPU"]],["Las computadoras cuentan con 0 y 1: 0, 1, 10, 11… ¿Qué número es 10 en este código?",["Dos","Diez","Once","Cien"]],["Un bucle repite código. ¿Cuántas veces imprime hello?"],["¿Qué imprime este código?"],["¿Cuál es el número binario 1011 en decimal?"],["Encuentra el error:",["Falta el punto y coma","Asigna en lugar de comparar","Mal nombre de función","Las llaves están mal"]],["¿Qué devuelve f(5)?"],["¿Qué estructura de datos funciona «primero en entrar, primero en salir»?",["Pila","Cola","Árbol","Arreglo"]],["¿Para qué sirve el DNS?",["Cifra contraseñas","Convierte nombres de sitios en direcciones IP","Acelera el Wi-Fi","Guarda tus correos"]],["¿Qué complejidad tiene la búsqueda binaria en una lista ordenada de n elementos?"]],
+ no:[["Hvilken av disse er en datamaskin?",["Banan","Sko","Bærbar PC","Skje"]],["En robot tar 3 skritt fremover og så 2 tilbake. Hvor langt er den fra start?",["1 skritt","2 skritt","3 skritt","5 skritt"]],["Roboten piper: pip, pup, pip, pup, pip… Hva kommer så?",["Pip","Pup","Pop","Stillhet"]],["Hva kalles «hjernen» i en datamaskin?",["Skjerm","Mus","Høyttaler","CPU"]],["Datamaskiner teller bare med 0 og 1: 0, 1, 10, 11… Hvilket tall er 10 i denne koden?",["To","Ti","Elleve","Hundre"]],["En løkke gjentar kode. Hvor mange ganger skriver dette ut hello?"],["Hva skriver denne koden ut?"],["Hva er det binære tallet 1011 som desimaltall?"],["Finn feilen:",["Mangler semikolon","Den tilordner i stedet for å sammenligne","Dårlig funksjonsnavn","Klammeparentesene er feil"]],["Hva returnerer f(5)?"],["Hvilken datastruktur fungerer etter «først inn, først ut»?",["Stakk","Kø","Tre","Tabell"]],["Hva gjør DNS?",["Krypterer passord","Gjør nettstedsnavn om til IP-adresser","Gjør Wi-Fi raskere","Lagrer e-posten din"]],["Hvor rask er binærsøk i en sortert liste med n elementer?"]],
+ sv:[["Vilken av dessa är en dator?",["Banan","Sko","Bärbar dator","Sked"]],["En robot tar 3 steg framåt och sedan 2 bakåt. Hur långt är den från start?",["1 steg","2 steg","3 steg","5 steg"]],["Roboten piper: pip, pop, pip, pop, pip… Vad kommer sedan?",["Pip","Pop","Pap","Tystnad"]],["Vad kallas datorns ”hjärna”?",["Skärm","Mus","Högtalare","CPU"]],["Datorer räknar bara med 0 och 1: 0, 1, 10, 11… Vilket tal är 10 i den här koden?",["Två","Tio","Elva","Hundra"]],["En loop upprepar kod. Hur många gånger skriver detta ut hello?"],["Vad skriver den här koden ut?"],["Vad är det binära talet 1011 i decimalform?"],["Hitta felet:",["Semikolon saknas","Den tilldelar i stället för att jämföra","Dåligt funktionsnamn","Klamrarna är fel"]],["Vad returnerar f(5)?"],["Vilken datastruktur fungerar enligt ”först in, först ut”?",["Stack","Kö","Träd","Array"]],["Vad gör DNS?",["Krypterar lösenord","Gör om webbplatsnamn till IP-adresser","Gör wifi snabbare","Lagrar din e-post"]],["Hur snabb är binärsökning i en sorterad lista med n element?"]],
+ nl:[["Welke hiervan is een computer?",["Banaan","Schoen","Laptop","Lepel"]],["Een robot zet 3 stappen vooruit en dan 2 terug. Hoever staat hij van de start?",["1 stap","2 stappen","3 stappen","5 stappen"]],["De robot piept: bliep, bloep, bliep, bloep, bliep… Wat komt er daarna?",["Bliep","Bloep","Blap","Stilte"]],["Hoe heet het “brein” van een computer?",["Beeldscherm","Muis","Luidspreker","CPU"]],["Computers tellen alleen met 0 en 1: 0, 1, 10, 11… Welk getal is 10 in deze code?",["Twee","Tien","Elf","Honderd"]],["Een lus herhaalt code. Hoe vaak drukt dit hello af?"],["Wat drukt deze code af?"],["Wat is het binaire getal 1011 in decimaal?"],["Vind de fout:",["Puntkomma ontbreekt","Het wijst toe in plaats van te vergelijken","Slechte functienaam","De accolades kloppen niet"]],["Wat geeft f(5) terug?"],["Welke datastructuur werkt volgens “first in, first out”?",["Stapel","Wachtrij","Boom","Array"]],["Wat doet DNS?",["Versleutelt wachtwoorden","Zet websitenamen om in IP-adressen","Maakt wifi sneller","Bewaart je e-mails"]],["Hoe snel is binair zoeken in een gesorteerde lijst van n items?"]],
+ pt:[["Qual destes é um computador?",["Banana","Sapato","Notebook","Colher"]],["Um robô dá 3 passos para a frente e depois 2 para trás. A que distância ele está de onde começou?",["1 passo","2 passos","3 passos","5 passos"]],["O robô faz: bip, bup, bip, bup, bip… O que vem depois?",["Bip","Bup","Bop","Silêncio"]],["Como se chama o “cérebro” de um computador?",["Tela","Mouse","Alto-falante","CPU"]],["Os computadores contam só com 0 e 1: 0, 1, 10, 11… Que número é 10 neste código?",["Dois","Dez","Onze","Cem"]],["Um laço repete código. Quantas vezes isto imprime hello?"],["O que este código imprime?"],["Qual é o número binário 1011 em decimal?"],["Encontre o erro:",["Falta ponto e vírgula","Atribui em vez de comparar","Nome de função ruim","As chaves estão erradas"]],["O que f(5) retorna?"],["Qual estrutura de dados funciona como “primeiro a entrar, primeiro a sair”?",["Pilha","Fila","Árvore","Array"]],["Para que serve o DNS?",["Criptografa senhas","Converte nomes de sites em endereços IP","Acelera o Wi-Fi","Guarda seus e-mails"]],["Qual a velocidade da busca binária em uma lista ordenada de n itens?"]]
+};
+const CK="tos_t,tos_s,tos_f,tos_b,a_ct,a_wb,a_s1,a_s2,a_tc,a_tl,a_un,a_ph,a_hint,a_su,a_li,a_or,a_em,a_pw,a_guest,a_dev,s_t,s_chip,s_close,s_out,s_acc,s_del,s_del2,s_guest,t_solved,t_tried,t_acc,t_first,t_best,t_pics,t_coins,t_prog,e_guest,e_email,e_pw,e_bad".split(",");
+const CV={"en": "Terms of Service|Please read and accept to start playing. (The full Terms are in English.)|By tapping “Accept & play” you agree to these Terms (or your parent or guardian has, for you).|Accept & play|Create your account|Welcome back|Save your progress, coins and stats.|Log in to pick up where you left off.|Create account|Log in|Username|3–20 characters|Needed for guests and new accounts. Please keep it kind: no racist, hateful or discriminatory names.|Sign up with {0}|Log in with {0}|or with email|Email|Password|Continue as guest|Accounts are saved on this device only.|Your stats|Stats|Close|Log out|Create account or log in|Delete account & data|Tap again to delete everything|saved on this device. Create an account to keep it under your name.|Puzzles solved|Answers tried|Accuracy|First-try wins|Best streak|Pictures colored|Coins|Progress|Pick a username to play as a guest.|Please enter a valid email address.|Password must be at least 8 characters.|Wrong email or password.", "de": "Nutzungsbedingungen|Bitte lesen und akzeptieren, um zu spielen. (Die vollständigen Bedingungen sind auf Englisch.)|Mit Tippen auf «Akzeptieren & spielen» stimmst du diesen Bedingungen zu (oder deine Eltern bzw. Erziehungsberechtigten für dich).|Akzeptieren & spielen|Konto erstellen|Willkommen zurück|Speichere deinen Fortschritt, deine Münzen und Statistiken.|Melde dich an und mach dort weiter, wo du aufgehört hast.|Konto erstellen|Anmelden|Benutzername|3–20 Zeichen|Für Gäste und neue Konten nötig. Bitte bleib freundlich: keine rassistischen, hasserfüllten oder diskriminierenden Namen.|Mit {0} registrieren|Mit {0} anmelden|oder mit E-Mail|E-Mail|Passwort|Als Gast weiter|Konten werden nur auf diesem Gerät gespeichert.|Deine Statistik|Statistik|Schliessen|Abmelden|Konto erstellen oder anmelden|Konto & Daten löschen|Nochmal tippen, um alles zu löschen|auf diesem Gerät gespeichert. Erstelle ein Konto, um es unter deinem Namen zu behalten.|Gelöste Rätsel|Versuchte Antworten|Genauigkeit|Siege im ersten Versuch|Beste Serie|Ausgemalte Bilder|Münzen|Fortschritt|Wähle einen Benutzernamen, um als Gast zu spielen.|Bitte gib eine gültige E-Mail-Adresse ein.|Das Passwort muss mindestens 8 Zeichen haben.|Falsche E-Mail oder falsches Passwort.", "gsw": "Nutzigsbedingige|Bitte läse und akzeptiere, zum spiele. (Die ganze Bedingige sind uf Änglisch.)|Mit em Tippe uf «Akzeptiere & spile» bisch mit dene Bedingige iverstande (oder dini Eltere für dich).|Akzeptiere & spile|Konto erstelle|Willkomme zrugg|Spichere din Fortschritt, dini Münze und Statistike.|Meld di aa und mach det wiiter, wo d ufghört häsch.|Konto erstelle|Aamälde|Benutzername|3–20 Zeiche|Für Gäscht und neui Konti nötig. Bitte blib fründlich: keini rassistische, hässige oder diskriminierende Näme.|Mit {0} registriere|Mit {0} aamälde|oder mit E-Mail|E-Mail|Passwort|Als Gascht wiiter|Konti werded nur uf dem Gerät gspeicheret.|Dini Statistik|Statistik|Zuemache|Abmälde|Konto erstelle oder aamälde|Konto & Date lösche|Nomal tippe zum alles lösche|uf dem Gerät gspeicheret. Erstell es Konto, zum es under dim Name z bhalte.|Glöste Rätsel|Probierti Antworte|Gnauigkeit|Sieg im erste Versuech|Beschti Serie|Aagmalti Bilder|Münze|Fortschritt|Wähl en Benutzername, zum als Gascht spiele.|Bitte gib e gültigi E-Mail-Adrässe ii.|S Passwort muess mindeschtens 8 Zeiche ha.|Falschi E-Mail oder falsches Passwort.", "fr": "Conditions d’utilisation|Lis et accepte pour commencer à jouer. (Les conditions complètes sont en anglais.)|En touchant « Accepter et jouer », tu acceptes ces conditions (ou tes parents ou tuteurs le font pour toi).|Accepter et jouer|Crée ton compte|Content de te revoir|Enregistre ta progression, tes pièces et tes stats.|Connecte-toi pour reprendre où tu t’es arrêté.|Créer un compte|Se connecter|Nom d’utilisateur|3 à 20 caractères|Obligatoire pour les invités et les nouveaux comptes. Reste aimable : pas de noms racistes, haineux ou discriminatoires.|S’inscrire avec {0}|Se connecter avec {0}|ou avec e-mail|E-mail|Mot de passe|Continuer en invité|Les comptes sont enregistrés sur cet appareil uniquement.|Tes stats|Stats|Fermer|Se déconnecter|Créer un compte ou se connecter|Supprimer le compte et les données|Touche encore pour tout supprimer|enregistré sur cet appareil. Crée un compte pour le garder à ton nom.|Énigmes résolues|Réponses essayées|Précision|Réussites du premier coup|Meilleure série|Images coloriées|Pièces|Progression|Choisis un nom d’utilisateur pour jouer en invité.|Saisis une adresse e-mail valide.|Le mot de passe doit contenir au moins 8 caractères.|E-mail ou mot de passe incorrect.", "it": "Termini di servizio|Leggi e accetta per iniziare a giocare. (I termini completi sono in inglese.)|Toccando «Accetta e gioca» accetti questi termini (o lo fa per te un genitore o tutore).|Accetta e gioca|Crea il tuo account|Bentornato|Salva i tuoi progressi, le monete e le statistiche.|Accedi per riprendere da dove avevi lasciato.|Crea account|Accedi|Nome utente|3–20 caratteri|Necessario per gli ospiti e i nuovi account. Sii gentile: niente nomi razzisti, offensivi o discriminatori.|Registrati con {0}|Accedi con {0}|oppure con e-mail|E-mail|Password|Continua come ospite|Gli account sono salvati solo su questo dispositivo.|Le tue statistiche|Statistiche|Chiudi|Esci|Crea un account o accedi|Elimina account e dati|Tocca di nuovo per eliminare tutto|salvato su questo dispositivo. Crea un account per tenerlo a tuo nome.|Enigmi risolti|Risposte provate|Precisione|Vittorie al primo tentativo|Serie migliore|Disegni colorati|Monete|Progresso|Scegli un nome utente per giocare come ospite.|Inserisci un indirizzo e-mail valido.|La password deve avere almeno 8 caratteri.|E-mail o password errata.", "es": "Términos del servicio|Lee y acepta para empezar a jugar. (Los términos completos están en inglés.)|Al tocar «Aceptar y jugar» aceptas estos términos (o lo hace por ti tu madre, padre o tutor).|Aceptar y jugar|Crea tu cuenta|Te damos la bienvenida|Guarda tu progreso, tus monedas y tus estadísticas.|Inicia sesión para seguir donde lo dejaste.|Crear cuenta|Iniciar sesión|Nombre de usuario|3–20 caracteres|Necesario para invitados y cuentas nuevas. Sé amable: sin nombres racistas, de odio o discriminatorios.|Registrarse con {0}|Iniciar sesión con {0}|o con correo|Correo electrónico|Contraseña|Continuar como invitado|Las cuentas se guardan solo en este dispositivo.|Tus estadísticas|Estadísticas|Cerrar|Cerrar sesión|Crear cuenta o iniciar sesión|Eliminar cuenta y datos|Toca otra vez para borrar todo|guardado en este dispositivo. Crea una cuenta para conservarlo con tu nombre.|Acertijos resueltos|Respuestas probadas|Precisión|Aciertos a la primera|Mejor racha|Dibujos coloreados|Monedas|Progreso|Elige un nombre de usuario para jugar como invitado.|Introduce un correo electrónico válido.|La contraseña debe tener al menos 8 caracteres.|Correo o contraseña incorrectos.", "no": "Vilkår|Les og godta for å begynne å spille. (De fullstendige vilkårene er på engelsk.)|Ved å trykke «Godta og spill» godtar du disse vilkårene (eller en forelder eller verge gjør det for deg).|Godta og spill|Opprett kontoen din|Velkommen tilbake|Lagre fremgangen, myntene og statistikken din.|Logg inn for å fortsette der du slapp.|Opprett konto|Logg inn|Brukernavn|3–20 tegn|Kreves for gjester og nye kontoer. Vær snill: ingen rasistiske, hatefulle eller diskriminerende navn.|Registrer deg med {0}|Logg inn med {0}|eller med e-post|E-post|Passord|Fortsett som gjest|Kontoer lagres bare på denne enheten.|Statistikken din|Statistikk|Lukk|Logg ut|Opprett konto eller logg inn|Slett konto og data|Trykk igjen for å slette alt|lagret på denne enheten. Opprett en konto for å beholde det under navnet ditt.|Løste gåter|Forsøkte svar|Nøyaktighet|Riktig på første forsøk|Beste rekke|Fargelagte bilder|Mynter|Fremgang|Velg et brukernavn for å spille som gjest.|Skriv inn en gyldig e-postadresse.|Passordet må ha minst 8 tegn.|Feil e-post eller passord.", "sv": "Användarvillkor|Läs och godkänn för att börja spela. (De fullständiga villkoren är på engelska.)|Genom att trycka på ”Godkänn och spela” godkänner du villkoren (eller en förälder eller vårdnadshavare gör det åt dig).|Godkänn och spela|Skapa ditt konto|Välkommen tillbaka|Spara dina framsteg, mynt och statistik.|Logga in för att fortsätta där du slutade.|Skapa konto|Logga in|Användarnamn|3–20 tecken|Krävs för gäster och nya konton. Var snäll: inga rasistiska, hatiska eller diskriminerande namn.|Registrera dig med {0}|Logga in med {0}|eller med e-post|E-post|Lösenord|Fortsätt som gäst|Konton sparas bara på den här enheten.|Din statistik|Statistik|Stäng|Logga ut|Skapa konto eller logga in|Radera konto och data|Tryck igen för att radera allt|sparat på den här enheten. Skapa ett konto för att behålla det under ditt namn.|Lösta gåtor|Försökta svar|Träffsäkerhet|Rätt på första försöket|Bästa svit|Färglagda bilder|Mynt|Framsteg|Välj ett användarnamn för att spela som gäst.|Ange en giltig e-postadress.|Lösenordet måste ha minst 8 tecken.|Fel e-post eller lösenord.", "nl": "Gebruiksvoorwaarden|Lees en accepteer om te beginnen met spelen. (De volledige voorwaarden zijn in het Engels.)|Door op “Accepteren en spelen” te tikken ga je akkoord met deze voorwaarden (of je ouder of voogd doet dat voor je).|Accepteren en spelen|Maak je account aan|Welkom terug|Bewaar je voortgang, munten en statistieken.|Log in om verder te gaan waar je gebleven was.|Account maken|Inloggen|Gebruikersnaam|3–20 tekens|Nodig voor gasten en nieuwe accounts. Wees aardig: geen racistische, haatdragende of discriminerende namen.|Registreren met {0}|Inloggen met {0}|of met e-mail|E-mail|Wachtwoord|Doorgaan als gast|Accounts worden alleen op dit apparaat bewaard.|Jouw statistieken|Statistieken|Sluiten|Uitloggen|Account maken of inloggen|Account en gegevens verwijderen|Tik nogmaals om alles te verwijderen|bewaard op dit apparaat. Maak een account om het onder je naam te houden.|Opgeloste puzzels|Geprobeerde antwoorden|Nauwkeurigheid|Goed in één keer|Beste reeks|Gekleurde platen|Munten|Voortgang|Kies een gebruikersnaam om als gast te spelen.|Vul een geldig e-mailadres in.|Het wachtwoord moet minstens 8 tekens hebben.|Onjuist e-mailadres of wachtwoord.", "pt": "Termos de Serviço|Leia e aceite para começar a jogar. (Os termos completos estão em inglês.)|Ao tocar em “Aceitar e jogar”, você concorda com estes termos (ou seu responsável concorda por você).|Aceitar e jogar|Crie sua conta|Bem-vindo de volta|Salve seu progresso, moedas e estatísticas.|Entre para continuar de onde parou.|Criar conta|Entrar|Nome de usuário|3 a 20 caracteres|Necessário para convidados e contas novas. Seja gentil: sem nomes racistas, de ódio ou discriminatórios.|Cadastrar com {0}|Entrar com {0}|ou com e-mail|E-mail|Senha|Continuar como convidado|As contas são salvas apenas neste dispositivo.|Suas estatísticas|Estatísticas|Fechar|Sair|Criar conta ou entrar|Excluir conta e dados|Toque de novo para excluir tudo|salvo neste dispositivo. Crie uma conta para mantê-lo no seu nome.|Enigmas resolvidos|Respostas tentadas|Precisão|Acertos de primeira|Melhor sequência|Desenhos coloridos|Moedas|Progresso|Escolha um nome de usuário para jogar como convidado.|Digite um e-mail válido.|A senha deve ter pelo menos 8 caracteres.|E-mail ou senha incorretos."};
+for(const c in CV){CV[c]=CV[c].replace(/ \([^|()]*\)\|/,"|");const v=CV[c].split("|");UI[c].ch=Object.fromEntries(CK.map((k,n)=>[k,v[n]]))}
+const CH=k=>{const u=UI[lang]&&UI[lang].ch;return(u&&u[k])||UI.en.ch[k]};
+function applyChrome(){
+ document.querySelectorAll("[data-i]").forEach(e=>e.textContent=(e.dataset.pre||"")+CH(e.dataset.i));
+ document.querySelectorAll("[data-ip]").forEach(e=>e.placeholder=CH(e.dataset.ip));
+ const M={gt:"tos_t",gbtn:"tos_b",tabc:"a_tc",tabl:"a_tl",aguest:"a_guest",st:"s_t",sclose:"s_close"};
+ for(const k in M)$(k).textContent=CH(M[k]);
+ $("me").setAttribute("aria-label",CH("s_t"));setMode(authMode)}
+const U=()=>UI[lang];
+UI.en.pic_change="Change picture";UI.en.pic_add="Add picture";UI.en.pic_remove="Remove picture";UI.en.pic_err="Couldn’t use that picture. Try another image.";UI.en.pp_t="Add a profile picture?";UI.en.pp_s="You can change or remove it at any time in Stats.";UI.en.pp_skip="Skip for now";
+Object.assign(UI.de,{pp_t:"Profilbild hinzufügen?",pp_s:"Du kannst es jederzeit unter Statistik ändern oder entfernen.",pp_skip:"Jetzt überspringen"});Object.assign(UI.gsw,{pp_t:"Profilbild ufelade?",pp_s:"Du chasch es jederzit under Statistik ändere oder wägnäh.",pp_skip:"Jetzt überspringe"});Object.assign(UI.fr,{pp_t:"Ajouter une photo de profil ?",pp_s:"Tu peux la changer ou la supprimer à tout moment dans Stats.",pp_skip:"Plus tard"});Object.assign(UI.it,{pp_t:"Aggiungere una foto profilo?",pp_s:"Puoi cambiarla o rimuoverla in qualsiasi momento in Statistiche.",pp_skip:"Salta per ora"});Object.assign(UI.es,{pp_t:"¿Añadir una foto de perfil?",pp_s:"Puedes cambiarla o quitarla en cualquier momento en Estadísticas.",pp_skip:"Omitir por ahora"});Object.assign(UI.no,{pp_t:"Legge til profilbilde?",pp_s:"Du kan endre eller fjerne det når som helst i Statistikk.",pp_skip:"Hopp over nå"});Object.assign(UI.sv,{pp_t:"Lägga till en profilbild?",pp_s:"Du kan ändra eller ta bort den när som helst i Statistik.",pp_skip:"Hoppa över just nu"});Object.assign(UI.nl,{pp_t:"Profielfoto toevoegen?",pp_s:"Je kunt dit altijd wijzigen of verwijderen bij Statistieken.",pp_skip:"Nu overslaan"});Object.assign(UI.pt,{pp_t:"Adicionar foto de perfil?",pp_s:"Você pode mudar ou remover a qualquer momento em Estatísticas.",pp_skip:"Pular por agora"});
+Object.assign(UI.de,{pic_change:"Bild ändern",pic_add:"Bild hinzufügen",pic_remove:"Bild entfernen",pic_err:"Dieses Bild geht nicht. Probier ein anderes."});
+Object.assign(UI.gsw,{pic_change:"Bild ändere",pic_add:"Bild ufelade",pic_remove:"Bild wägnäh",pic_err:"Das Bild gaat nöd. Probier es anders."});
+Object.assign(UI.fr,{pic_change:"Changer la photo",pic_add:"Ajouter une photo",pic_remove:"Supprimer la photo",pic_err:"Impossible d’utiliser cette image. Essaie-en une autre."});
+Object.assign(UI.it,{pic_change:"Cambia foto",pic_add:"Aggiungi foto",pic_remove:"Rimuovi foto",pic_err:"Impossibile usare questa immagine. Provane un’altra."});
+Object.assign(UI.es,{pic_change:"Cambiar foto",pic_add:"Añadir foto",pic_remove:"Quitar foto",pic_err:"No se pudo usar esa imagen. Prueba con otra."});
+Object.assign(UI.no,{pic_change:"Bytt bilde",pic_add:"Legg til bilde",pic_remove:"Fjern bilde",pic_err:"Kunne ikke bruke bildet. Prøv et annet."});
+Object.assign(UI.sv,{pic_change:"Byt bild",pic_add:"Lägg till bild",pic_remove:"Ta bort bild",pic_err:"Kunde inte använda bilden. Försök med en annan."});
+Object.assign(UI.nl,{pic_change:"Foto wijzigen",pic_add:"Foto toevoegen",pic_remove:"Foto verwijderen",pic_err:"Die afbeelding werkt niet. Probeer een andere."});
+Object.assign(UI.pt,{pic_change:"Trocar foto",pic_add:"Adicionar foto",pic_remove:"Remover foto",pic_err:"Não foi possível usar essa imagem. Tente outra."});
+const PT=k=>(UI[lang]&&UI[lang][k])||UI.en[k];
+function setAv(el,name,pic){el.textContent="";if(pic){const im=document.createElement("img");im.alt="";im.src=pic;el.appendChild(im)}else el.textContent=(String(name||"").trim().charAt(0)||"?").toUpperCase()}
+const GR={};
+function T(n){const p=PUZZLES[n];if(lang==="en")return p;const t=TR[lang][n];return{...p,g:GR[lang]?GR[lang][n]:n<12?G[lang](n+1):U().college,q:t[0],o:t[1]||p.o}}
+function nextLbl(){$("next").textContent=i>=PUZZLES.length?U().again:U().next}
+let i=0,sel=1,total=0,filled=0,locked=false,coins=0,wrongs=0;
+const $=id=>document.getElementById(id);
+
+function bar(){$("bar").innerHTML=PUZZLES.map((_,n)=>`<div class="pip ${n<i?"done":n===i?"now":""}"></div>`).join("")}
+function showCoins(pop){
+  $("coins").textContent=coins;$("coinbox").setAttribute("aria-label",CH("t_coins")+": "+coins);
+  if(pop){const b=$("coinbox");b.classList.remove("pop");void b.offsetWidth;b.classList.add("pop")}
+}
+function addCoins(n){coins+=n;D.coins=coins;persist();showCoins(true)}
+function replay(el){el.style.animation="none";void el.offsetWidth;el.style.animation=""}
+function showPuzzle(){replay($("puzzle"));
+  locked=false;wrongs=0;const p=T(i);
+  $("puzzle").classList.remove("hide");$("draw").classList.add("hide");
+  $("grade").textContent=p.g;$("q").textContent=p.q;
+  const code=$("code");
+  if(p.c){code.textContent=p.c;code.classList.remove("hide")}else code.classList.add("hide");
+  $("hint").textContent="";$("opts").innerHTML="";
+  p.o.forEach((t,n)=>{const b=document.createElement("button");b.className="opt";b.textContent=t;b.onclick=()=>answer(n,b);$("opts").appendChild(b)});
+  bar();
+}
+function answer(n,btn){
+  if(locked)return;
+  if(n===PUZZLES[i].a){
+    locked=true;btn.classList.add("right");track(true);
+    $("hint").textContent=U().ok;$("hint").style.color="var(--good)";
+    setTimeout(showDraw,700);
+  }else{
+    btn.classList.add("wrong");btn.disabled=true;track(false);wrongs++;
+    $("hint").textContent=U().no;$("hint").style.color="var(--bad)";
+  }
+}
+function showDraw(){replay($("draw"));
+  const pic=PICS[i%PICS.length];
+  $("puzzle").classList.add("hide");$("draw").classList.remove("hide");$("next").classList.add("hide");
+  $("title").textContent=U().unlocked+" "+U().names[i%PICS.length];
+  total=pic.r.length;filled=0;sel=1;
+  $("art").innerHTML=pic.r.map(([m,n,x,y])=>m.replace("/>",` class="reg" data-n="${n}"/>`)+`<text class="lbl" x="${x}" y="${y}" data-l="${n}">${n}</text>`).join("");
+  const labels=[...$("art").querySelectorAll("text")],regs=[...$("art").querySelectorAll(".reg")];
+  regs.forEach((el,k)=>el.onclick=()=>tap(el,labels[k]));
+  $("pal").innerHTML="";
+  COLORS.forEach((c,k)=>{const b=document.createElement("button");b.className="sw";b.style.background=c;b.style.color=TXT[k];b.textContent=k+1;b.setAttribute("aria-label",U().color+" "+(k+1));b.onclick=()=>{sel=k+1;sync()};$("pal").appendChild(b)});
+  sync();status();i++;D.i=i;persist();bar();
+  nextLbl();
+  $("draw").scrollIntoView({behavior:"smooth",block:"start"});
+}
+function sync(){[...$("pal").children].forEach((b,k)=>b.setAttribute("aria-pressed",k+1===sel))}
+function status(){$("dhint").style.color="";$("dhint").textContent=U().pick.replace("{0}",filled).replace("{1}",total)}
+function tap(el,lbl){
+  if(el.dataset.done)return;
+  const n=+el.dataset.n;
+  if(n===sel){
+    el.style.fill=COLORS[n-1];el.dataset.done=1;lbl.remove();filled++;status();
+    if(filled===total){D.st.pics++;addCoins(1);persist();$("dhint").textContent=U().done;$("dhint").style.color="var(--good)";$("next").classList.remove("hide")}
+  }else{
+    $("dhint").textContent=U().wrong.replace(/\{0\}/g,n);$("dhint").style.color="var(--bad)";
+  }
+}
+$("next").onclick=()=>{if(i>=PUZZLES.length)i=0;D.i=i;persist();showPuzzle();window.scrollTo({top:0,behavior:"smooth"})};
+function applyLang(){
+ document.documentElement.lang=lang;document.querySelectorAll(".lsel").forEach(x=>x.value=lang);applyChrome();applyTos();
+ $("h1").textContent=U().title;$("sub").textContent=U().sub;
+ if($("puzzle").classList.contains("hide")){
+  $("title").textContent=U().unlocked+" "+U().names[(i-1)%PICS.length];nextLbl();
+  [...$("pal").children].forEach((b,k)=>b.setAttribute("aria-label",U().color+" "+(k+1)));
+  if(filled<total)status();else $("dhint").textContent=U().done;
+ }else showPuzzle();
+}
+const MORE=[["bar","Österreichisch (Austrian)","spoken Austrian (Austro-Bavarian, casual Viennese-style Umgangssprache) the way Austrians really talk and text each other, e.g. 'Servus', 'leiwand', 'ned/net' instead of 'nicht', 'heast', 'a bissl', 'Sackerl', 'Paradeiser', 'Erdäpfel', 'Jänner', 'schau' , 'gscheit', dropped word endings like 'is' for 'ist' and 'host' for 'hast'; friendly and readable for kids, NOT standard High German"],["sq","Shqip","Albanian"],["eu","Euskara","Basque"],["be","Беларуская","Belarusian"],["bs","Bosanski","Bosnian"],["bg","Български","Bulgarian"],["ca","Català","Catalan"],["hr","Hrvatski","Croatian"],["cs","Čeština","Czech"],["da","Dansk","Danish"],["et","Eesti","Estonian"],["fi","Suomi","Finnish"],["gl","Galego","Galician"],["el","Ελληνικά","Greek"],["hu","Magyar","Hungarian"],["is","Íslenska","Icelandic"],["ga","Gaeilge","Irish"],["lv","Latviešu","Latvian"],["lt","Lietuvių","Lithuanian"],["lb","Lëtzebuergesch","Luxembourgish"],["mk","Македонски","Macedonian"],["mt","Malti","Maltese"],["pl","Polski","Polish"],["ro","Română","Romanian"],["rm","Rumantsch","Romansh (Swiss)"],["ru","Русский","Russian"],["sr-Latn","Srpski (latinica)","Serbian written in the Latin alphabet (latinica), not Cyrillic"],["sr","Српски (ћирилица)","Serbian written in the Cyrillic alphabet (ćirilica)"],["sk","Slovenčina","Slovak"],["sl","Slovenščina","Slovenian"],["tr","Türkçe","Turkish"],["uk","Українська","Ukrainian"],["cy","Cymraeg","Welsh"]];
+{MORE.forEach(([c,n])=>{const o=document.createElement("option");o.value=c;o.textContent=n;$("lang").appendChild(o)});
+ const sel=$("lang"),opts=[...sel.options],en=opts.shift();opts.sort((a,b)=>a.textContent.localeCompare(b.textContent,"en"));sel.innerHTML="";[en,...opts].forEach(o=>sel.appendChild(o));document.querySelectorAll(".lsel").forEach(x=>{if(x!==sel)x.innerHTML=sel.innerHTML})}
+/* Every language except English is translated by Claude when chosen. The built-in
+   translations above are only a fallback if Claude is unavailable. */
+const TOS_EN=document.querySelector(".gtxt").innerHTML;
+const NAMES={de:"German as written in Switzerland (use ss, never ß)",fr:"French",it:"Italian as used in Switzerland (Svizzera)",es:"Spanish",no:"Norwegian (Bokmål)",sv:"Swedish",nl:"Dutch",pt:"Portuguese",gsw:"Swiss German (Schwiizertüütsch, Zurich-style dialect, written the way Swiss people text each other; friendly and readable for kids)"};
+const viaClaude=new Set();
+function store(c,r){UI[c]=r.UI;GR[c]=r.G;TR[c]=r.P.map(p=>[p.q,p.o]);viaClaude.add(c)}
+let lastErr="";
+const FATAL=new Set(["not_granted","sampling_disabled","not_declared","capability_disabled","capability_removed","session_expired","invalid_request","prompt_too_large"]);
+const errCode=e=>(e&&(e.code||e.message))||"error";
+const ERRTXT={not_granted:"Please allow Claude to translate when asked.",sampling_disabled:"Translation isn’t available for this account.",rate_limited:"Too many requests. Wait a moment.",session_expired:"Please sign in to Claude again.",no_sample:"Translation is only available on the published page."};
+const prog=t=>{$("sub").textContent=t;const g=document.querySelector("#gate [data-i=tos_s]");if(g)g.textContent=t};
+async function loadLang(c){
+ if(c==="en"||viaClaude.has(c))return true;
+ const fb=!!UI[c];
+ const ok=await loadLang0(c);
+ if(ok&&viaClaude.has(c))await loadTos(c);
+ return ok||fb}
+const TOSX={};
+function cleanTos(h){
+ const d=new DOMParser().parseFromString("<body>"+h+"</body>","text/html").body,ok=["P","H3","UL","LI","EM","STRONG"];
+ (function w(n){[...n.children].forEach(e=>{if(!ok.includes(e.tagName)){e.replaceWith(document.createTextNode(e.textContent));return}[...e.attributes].forEach(a=>e.removeAttribute(a.name));w(e)})})(d);
+ return d.innerHTML}
+async function loadTos(c){
+ if(TOSX[c])return;
+ try{const s=localStorage.getItem("tos4:"+c);if(s){TOSX[c]=s;return}}catch(_){}
+ const name=NAMES[c]||(MORE.find(m=>m[0]===c)||[])[2];if(!name)return;
+ let sample=null;try{sample=await claude.use("sample")}catch(_){}if(!sample)return;
+ prog("Translating… 4/4");
+ for(let k=0;k<2;k++){
+  try{const r=await sample.json("Translate the text values of this HTML Terms of Service into "+name+". Keep every HTML tag exactly as is (p, h3, ul, li, em), the order, the numbering of headings, the company name Techno Creative Company, the email address, and legal terms like FADP. Reply with only JSON of the form {\"T\":\"<translated html>\"}, nothing else.\n"+JSON.stringify({T:TOS_EN}),{cache:false});
+   const t=r&&typeof r.T==="string"?cleanTos(r.T):"";
+   if((t.match(/<h3>/g)||[]).length===11&&t.length>800){TOSX[c]=t;try{localStorage.setItem("tos4:"+c,t)}catch(_){}return}}
+  catch(e){if(FATAL.has(errCode(e)))return}}}
+function applyTos(){
+ const g=document.querySelector(".gtxt"),t=lang!=="en"&&TOSX[lang];
+ g.innerHTML=t||TOS_EN;g.lang=t?lang:"en";
+ const n=document.querySelector("#gate [data-i=tos_s]");
+ if(lang!=="en"&&!t)n.textContent+=" (The full Terms are in English.)"}
+async function loadLang0(c){
+ const name=NAMES[c]||(MORE.find(m=>m[0]===c)||[])[2];if(!name)return false;
+ try{const s=localStorage.getItem("tr2:"+c);if(s){store(c,JSON.parse(s));return true}}catch(_){}
+ lastErr="";
+ let sample=null;try{sample=await claude.use("sample")}catch(_){}
+ if(!sample){lastErr="no_sample";return false}
+ const ask=async(part,check)=>{
+  for(let k=0;k<2;k++){
+   try{const r=await sample.json("Translate every string value in this JSON into "+name+" for a kids’ tech-puzzle game. Keep keys, array order, array lengths, {0}/{1} placeholders, numbers, code terms like CPU, DNS, O(n) and the word hello exactly as they are. Reply with only the JSON, nothing else.\n"+JSON.stringify(part),{cache:false});
+    if(r&&check(r))return r;lastErr="bad_reply"}catch(e){lastErr=errCode(e);if(FATAL.has(lastErr))return null;if(lastErr==="rate_limited"){prog("Busy, retrying in a moment…");await new Promise(r=>setTimeout(r,6000))}}
+   }
+  return null};
+ const N=PUZZLES.length,cut=7,ok=(r,a,b)=>Array.isArray(r.P)&&r.P.length===b-a&&r.P.every((p,k)=>typeof p.q==="string"&&Array.isArray(p.o)&&p.o.length===PUZZLES[a+k].o.length);
+ prog("Translating… 1/4");
+ const A=await ask({UI:UI.en,G:PUZZLES.map(p=>p.g)},r=>r.UI&&typeof r.UI==="object"&&Array.isArray(r.G)&&r.G.length===N&&Object.keys(UI.en).every(k=>k in r.UI));
+ if(!A)return false;
+ prog("Translating… 2/4");
+ const B=await ask({P:PUZZLES.slice(0,cut).map(p=>({q:p.q,o:p.o}))},r=>ok(r,0,cut));
+ if(!B)return false;
+ prog("Translating… 3/4");
+ const C=await ask({P:PUZZLES.slice(cut).map(p=>({q:p.q,o:p.o}))},r=>ok(r,cut,N));
+ if(!C)return false;
+ const r={UI:A.UI,G:A.G,P:[...B.P,...C.P]};
+ store(c,r);try{localStorage.setItem("tr2:"+c,JSON.stringify(r))}catch(_){}
+ return true}
+const onLang=async e=>{
+ const c=e.target.value,all=document.querySelectorAll(".lsel");all.forEach(x=>x.disabled=true);
+ const ok=await loadLang(c);all.forEach(x=>x.disabled=false);
+ if(ok){lang=c;D.lang=c;persist();try{localStorage.setItem("lang",c)}catch(_){}applyLang()}
+ else{applyLang();$("sub").textContent="Couldn’t load that language. "+(ERRTXT[lastErr]||"Please try again.")}
+};
+document.querySelectorAll(".lsel").forEach(x=>x.onchange=onLang);
+{const x=(navigator.language||"en").slice(0,2),nl=x==="nb"||x==="nn"?"no":x;if(UI[nl])lang=nl;try{const s=localStorage.getItem("lang");if(s&&UI[s])lang=s}catch(_){}}
+
+/* ===== Accounts, saving and stats ===== */
+/* To turn on real Google / Apple sign-in, fill these in (see notes). */
+const AUTH_CONFIG={googleClientId:"",appleClientId:"",appleRedirectUri:""};
+/* Show the Google/Apple buttons even before they are configured (design preview). Set to false to hide unconfigured buttons. */
+const SHOW_PREVIEW=true;
+const main=document.querySelector("main");
+function blank(){return{i:0,coins:0,lang:"",name:"",st:{answered:0,correct:0,first:0,streak:0,best:0,pics:0}}}
+let uid=null,D=blank(),authMode="create";
+const lsGet=k=>{try{return localStorage.getItem(k)}catch(_){return null}};
+const lsSet=(k,v)=>{try{localStorage.setItem(k,v);return true}catch(_){return false}};
+const lsDel=k=>{try{localStorage.removeItem(k)}catch(_){}};
+function users(){try{return JSON.parse(lsGet("users")||"{}")||{}}catch(_){return{}}}
+function saveUsers(u){return lsSet("users",JSON.stringify(u))}
+function loadData(id){try{const d=JSON.parse(lsGet("data:"+id)||"null");if(d){const b=blank();return{...b,...d,st:{...b.st,...(d.st||{})}}}}catch(_){}return blank()}
+function persist(){if(uid)lsSet("data:"+uid,JSON.stringify(D))}
+function track(ok){const s=D.st;s.answered++;if(ok){s.correct++;if(!wrongs)s.first++;s.streak++;if(s.streak>s.best)s.best=s.streak}else s.streak=0;persist()}
+function lock(){document.body.classList.add("locked");main.inert=true;main.setAttribute("aria-hidden","true")}
+function unlock(){document.body.classList.remove("locked");main.inert=false;main.removeAttribute("aria-hidden")}
+/* Ask the browser not to evict our saved progress (Huawei Phone Manager / browsers clean storage aggressively) */
+let _ps=0;function keepStorage(){if(_ps++)return;try{navigator.storage&&navigator.storage.persist&&navigator.storage.persist()}catch(_){}}
+const hex=b=>[...b].map(x=>x.toString(16).padStart(2,"0")).join("");
+const unhex=h=>new Uint8Array(h.match(/../g).map(x=>parseInt(x,16)));
+async function hashPw(pw,saltHex){
+ const salt=saltHex?unhex(saltHex):crypto.getRandomValues(new Uint8Array(16));
+ const key=await crypto.subtle.importKey("raw",new TextEncoder().encode(pw),"PBKDF2",false,["deriveBits"]);
+ const bits=await crypto.subtle.deriveBits({name:"PBKDF2",salt,iterations:150000,hash:"SHA-256"},key,256);
+ return{salt:hex(salt),hash:hex(new Uint8Array(bits))}}
+function parseJwt(t){try{const b=t.split(".")[1].replace(/-/g,"+").replace(/_/g,"/");return JSON.parse(decodeURIComponent(escape(atob(b))))}catch(_){return{}}}
+/* ===== Username safety (best-effort filter; lists stored ROT13 so they aren't spelled out) ===== */
+const d13=a=>a.map(w=>w.replace(/[a-z]/g,c=>String.fromCharCode((c.charCodeAt(0)-97+13)%26+97)));
+const BAD_SUB=d13(["avttre", "avttn", "jrgonpx", "gbjryurnq", "enturnq", "puvatpubat", "mvccreurnq", "fynagrlr", "cbepuzbaxrl", "xnssve", "uvgyre", "juvgrcbjre", "juvgrcevqr", "fvrturvy", "urvyuvgyre", "tnfpunzore"]),BAD_TOK=d13(["pbba", "fcvp", "fcvpx", "xvxr", "puvax", "tbbx", "ornare", "cnxv", "wnc", "arteb", "qnexvr", "qnexl", "anmv", "anmvf", "pbbyvr", "vawha", "erqfxva"]),BAD_PRE=d13(["ungr", "xvyy", "xvyynyy", "qrngugb", "shpx"]),BAD_GRP=["black", "blacks", "white", "whites", "jew", "jews", "jewish", "muslim", "muslims", "asian", "asians", "mexican", "mexicans", "arab", "arabs", "chinese", "indian", "indians", "african", "africans", "latino", "latinos", "immigrant", "immigrants"];
+function badWord(n){return badWordV(n,"i")||badWordV(n,"l")}
+function badWordV(n,o){
+ const raw=n.toLowerCase().replace(/\s/g,"");
+ if(/1488|14\/88/.test(raw))return true;
+ const base=n.normalize("NFD").replace(/[\u0300-\u036f]/g,"").toLowerCase().replace(/ß/g,"ss");
+ const L={"0":"o","@":"a","$":"s","!":"i","1":o,"|":o,"3":"e","4":"a","5":"s","6":"g","7":"t","8":"b","9":"g"};
+ const leet=base.replace(/[0@$!1|345-9]/g,c=>L[c]);
+ const letters=leet.replace(/[^a-z]/g,"");
+ if(/kkk/.test(letters))return true;
+ const lim=x=>x.replace(/(.)\1{2,}/g,"$1$1");
+ const sq=lim(letters);
+ if(BAD_SUB.some(w=>sq.includes(lim(w))))return true;
+ {const pl=lim(base.replace(/[^a-z]/g,""));if(BAD_SUB.some(w=>pl.includes(lim(w))))return true}
+ if(leet.split(/[^a-z]+/).filter(Boolean).some(t=>BAD_TOK.includes(lim(t))))return true;
+ return BAD_PRE.some(a=>BAD_GRP.some(g=>sq.includes(a+g)))||profane(leet,sq,base)}
+/* Rude words (stored ROT13). Checked forwards AND backwards, so "kcuf" / "tihs" are caught too. */
+const PROF_SUB=d13(["shpx", "fuvg", "phag", "ovgpu", "juber", "fyhg", "nffubyr", "pbpxfhpx", "qvpxurnq", "chffl", "ergneq", "ohyyfuvg", "ubefrfuvg", "zbgures", "fpurvff", "nefpuybpu", "sbgmr", "uherafbua", "jvpufre", "fpuynzcr", "chgnva", "pbaaneq", "fnybcr", "zreqr", "pnmmb", "inssnaphyb", "zvreqn", "craqrwb", "uvwhrchgn", "onfgneqb", "onfgneq"]),PROF_REV=d13(["shpx", "fuvg", "phag", "ovgpu", "juber"]),PROF_TOK=d13(["nff", "nefr", "pbpx", "qvpx", "cvff", "cbea", "cbeab", "frk", "frkl", "nany", "gvg", "gvgf", "penc", "qnza", "encr", "encvfg", "cravf", "intvan", "ahqr", "obbo", "obbof", "jnax", "gjng", "phz", "wvmm", "qvyqb", "chgn", "phyb", "chgr", "xnpxr", "svpx", "svpxra", "ahggr", "uher"]);
+PROF_SUB.push(...d13(["avtt","avttre","avttn","sntbg","snttbg","genaal"]));PROF_REV.push(...d13(["avttre","avttn"]));
+function profane(leet,sq,base){
+ const c1=x=>x.replace(/(.)\1{2,}/g,"$1"),rv=x=>[...x].reverse().join("");
+ const raw=leet.replace(/[^a-z]/g,"").replace(/scunthorpe/g,""),pl=base.replace(/[^a-z]/g,"").replace(/scunthorpe/g,""),forms=[sq.replace(/scunthorpe/g,""),c1(raw),pl,c1(pl)];
+ if(PROF_SUB.some(w=>forms.some(f=>f.includes(w)||(PROF_REV.includes(w)&&rv(f).includes(w)))))return true;
+ return leet.split(/[^a-z]+/).filter(Boolean).some(t=>[t,c1(t)].some(x=>PROF_TOK.includes(x)||PROF_TOK.includes(rv(x))))}
+function nameCheck(n){
+ if(n.length<3||n.length>20)return "Username must be 3–20 characters.";
+ if(!/^[\p{L}\p{N}][\p{L}\p{N} ._-]*$/u.test(n))return "Use only letters, numbers, spaces, . _ or -.";
+ if(badWord(n))return "That username isn’t allowed. Please pick a kind one: no hateful or discriminatory names.";
+ return ""}
+const err=m=>{$("aerr").textContent=m||"";return false};
+
+function enter(id,gname){
+ keepStorage();uid=id;D=loadData(id);lsSet("session",id);
+ if(id==="guest"&&gname){D.name=gname;persist()}
+ i=(D.i|0)>=PUZZLES.length||(D.i|0)<0?0:(D.i|0);coins=Math.max(0,D.coins|0);showCoins(false);
+ const u=users()[id],name=id==="guest"?(D.name||"Guest"):(u&&u.name)||"Player";
+ $("mename").textContent=name;setAv($("av"),name,id==="guest"?"":u&&u.pic);
+ $("auth").classList.add("hide");$("stats").classList.add("hide");
+ $("puzzle").classList.remove("hide");$("draw").classList.add("hide");
+ const l=D.lang;
+ if(l&&l!==lang){if(UI[l]){lang=l;if(l!=="en")loadLang(l).then(ok=>{if(ok&&uid===id){lang=l;applyLang()}})}else if(MORE.some(m=>m[0]===l)){loadLang(l).then(ok=>{if(ok&&uid===id){lang=l;applyLang()}})}}
+ unlock();applyLang()}
+
+function setMode(m){
+ authMode=m;const c=m==="create";
+ $("tabc").setAttribute("aria-selected",c);$("tabl").setAttribute("aria-selected",!c);
+ $("at").textContent=CH(c?"a_ct":"a_wb");
+ $("asub").textContent=CH(c?"a_s1":"a_s2");
+ $("bgt").textContent=CH(c?"a_su":"a_li").replace("{0}","Google");$("bat").textContent=CH(c?"a_su":"a_li").replace("{0}","Apple");
+ $("nrow").classList.toggle("hide",!c);$("asubmit").textContent=CH(c?"a_tc":"a_tl");
+ $("apw").setAttribute("autocomplete",c?"new-password":"current-password");err("")}
+function showAuth(){lock();setMode(authMode);$("auth").classList.remove("hide");preloadSocial();$("tabc").focus()}
+function startFlow(){const sid=lsGet("session");if(sid&&(sid==="guest"||users()[sid]))enter(sid);else showAuth()}
+
+$("tabc").onclick=()=>setMode("create");$("tabl").onclick=()=>setMode("login");
+$("aguest").onclick=()=>{
+ if(authMode!=="create"){setMode("create");err(CH("e_guest"));$("aname").focus();return}
+ const n=$("aname").value.trim(),e=nameCheck(n);
+ if(e){err(e);$("aname").focus();return}
+ enter("guest",n)};
+$("af").onsubmit=async e=>{
+ e.preventDefault();err("");
+ const email=$("aemail").value.trim().toLowerCase(),pw=$("apw").value,name=$("aname").value.trim();
+ if(!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email))return err(CH("e_email"));
+ if(!(window.crypto&&crypto.subtle))return err("Email sign-in isn’t available in this browser.");
+ const U=users(),id="email:"+email,btn=$("asubmit");btn.disabled=true;
+ try{
+  if(authMode==="create"){
+   const ne=nameCheck(name);if(ne)return err(ne);
+   if(pw.length<8)return err(CH("e_pw"));
+   if(U[id])return err("That email already has an account. Try logging in.");
+   const h=await hashPw(pw);
+   U[id]={id,provider:"email",name,email,salt:h.salt,hash:h.hash,created:Date.now()};
+   if(!saveUsers(U))return err("Couldn’t save the account on this device. Is private browsing on?");
+   enter(id);offerPic()
+  }else{
+   const u=U[id],bad=CH("e_bad");
+   if(!u||!u.hash)return err(bad);
+   const h=await hashPw(pw,u.salt);
+   if(h.hash!==u.hash)return err(bad);
+   enter(id)}
+ }catch(_){err("Something went wrong. Please try again.")}
+ finally{btn.disabled=false}};
+
+function social(provider,sub,name,email){
+ const id=provider+":"+sub,U=users(),isNew=!U[id];
+ if(!U[id]){
+  if(authMode==="create"){const un=$("aname").value.trim(),ne=nameCheck(un);if(ne)return err(ne);name=un}
+  else if(!name||nameCheck(name))name="Player";
+  U[id]={id,provider,name,email:email||"",created:Date.now()}}
+ else if(name&&!U[id].name)U[id].name=name;
+ if(!saveUsers(U))return err("Couldn’t save the account on this device. Is private browsing on?");
+ enter(id);if(isNew&&authMode==="create")offerPic()}
+function loadScript(src){return new Promise((res,rej)=>{const s=document.createElement("script"),t=setTimeout(()=>rej(new Error("timeout")),8000);s.src=src;s.async=true;s.onload=()=>{clearTimeout(t);res()};s.onerror=()=>{clearTimeout(t);rej(new Error("load"))};document.head.appendChild(s)})}
+function hideProv(id){const b=$(id);if(b)b.classList.add("hide");const any=!$("bg").classList.contains("hide")||!$("ba").classList.contains("hide");const o=document.querySelector("#auth .or");if(o)o.classList.toggle("hide",!any)}
+let socialReady=false;
+function preloadSocial(){
+ if(socialReady)return;socialReady=true;
+ if(!AUTH_CONFIG.googleClientId&&!SHOW_PREVIEW)hideProv("bg");
+ if(!AUTH_CONFIG.appleClientId&&!SHOW_PREVIEW)hideProv("ba");
+ if(AUTH_CONFIG.googleClientId)loadScript("https://accounts.google.com/gsi/client").catch(()=>hideProv("bg"));
+ if(AUTH_CONFIG.appleClientId)loadScript("https://appleid.cdn-apple.com/appleauth/static/jsapi/appleid/1/en_US/appleid.auth.js").then(()=>{
+  AppleID.auth.init({clientId:AUTH_CONFIG.appleClientId,scope:"name email",redirectURI:AUTH_CONFIG.appleRedirectUri||location.origin+location.pathname,state:"uc",usePopup:true})}).catch(()=>hideProv("ba"))}
+$("bg").onclick=()=>{
+ err("");
+ if(!AUTH_CONFIG.googleClientId)return err("Google sign-in isn’t set up yet.");
+ if(authMode==="create"){const ne=nameCheck($("aname").value.trim());if(ne)return err(ne)}
+ if(!(window.google&&google.accounts&&google.accounts.oauth2))return err("Google is still loading. Try again in a moment.");
+ try{google.accounts.oauth2.initTokenClient({client_id:AUTH_CONFIG.googleClientId,scope:"openid email profile",
+  callback:async r=>{try{if(!r.access_token)throw 0;const p=await(await fetch("https://www.googleapis.com/oauth2/v3/userinfo",{headers:{Authorization:"Bearer "+r.access_token}})).json();if(!p.sub)throw 0;social("google",p.sub,p.name||p.given_name,p.email)}catch(_){err("Google sign-in didn’t work. Please try again.")}},
+  error_callback:()=>{}}).requestAccessToken()}catch(_){err("Google sign-in didn’t work. Please try again.")}};
+$("ba").onclick=async()=>{
+ err("");
+ if(!AUTH_CONFIG.appleClientId)return err("Apple sign-in isn’t set up yet.");
+ if(authMode==="create"){const ne=nameCheck($("aname").value.trim());if(ne)return err(ne)}
+ if(!window.AppleID)return err("Apple is still loading. Try again in a moment.");
+ try{const r=await AppleID.auth.signIn(),p=parseJwt(r.authorization.id_token),n=r.user&&r.user.name?[r.user.name.firstName,r.user.name.lastName].filter(Boolean).join(" "):"";
+  if(!p.sub)throw 0;social("apple",p.sub,n,(r.user&&r.user.email)||p.email)}
+ catch(e){if(e&&e.error==="popup_closed_by_user")return;err("Apple sign-in didn’t work. Please try again.")}};
+
+let statsOpen=false,statsPushed=false;
+function popStats(){if(statsPushed){statsPushed=false;try{history.back()}catch(_){}}}
+function showStats(){
+ if(!statsOpen){statsOpen=true;try{history.pushState({uc:"stats"},"");statsPushed=true}catch(_){}}
+ const s=D.st,N=PUZZLES.length,acc=s.answered?Math.round(100*s.correct/s.answered):0,u=users()[uid]||{};
+ const tiles=[[s.correct,CH("t_solved")],[s.answered,CH("t_tried")],[acc+"%",CH("t_acc")],[s.first,CH("t_first")],[s.best,CH("t_best")],[s.pics,CH("t_pics")],[coins,CH("t_coins")],[Math.min(i,N)+" / "+N,CH("t_prog")]];
+ $("sg").innerHTML=tiles.map(t=>`<div class="tile"><b>${t[0]}</b><span>${t[1]}</span></div>`).join("");
+ $("who").textContent=uid==="guest"?(D.name||"Guest")+" · "+CH("s_guest"):(u.name||"Player")+(u.email?" · "+u.email:"");
+ $("slogout").textContent=uid==="guest"?CH("s_acc"):CH("s_out");
+ $("sdel").textContent=CH("s_del");$("sdel").dataset.arm="";
+ const acct=uid!=="guest",nm=acct?(u.name||"Player"):"";
+ $("picrow").classList.toggle("hide",!acct);$("perr").textContent="";
+ if(acct){setAv($("bigav"),nm,u.pic);$("pchange").textContent=PT(u.pic?"pic_change":"pic_add");$("premove").textContent=PT("pic_remove");$("premove").classList.toggle("hide",!u.pic)}
+ lock();$("stats").classList.remove("hide");$("sclose").focus()}
+function setPic(pic){
+ if(uid==="guest"||!uid)return;const U=users();if(!U[uid])return;
+ if(pic)U[uid].pic=pic;else delete U[uid].pic;
+ if(!saveUsers(U)){$("perr").textContent=PT("pic_err");return}
+ setAv($("av"),U[uid].name,U[uid].pic);showStats()}
+$("pchange").onclick=()=>{if(uid&&uid!=="guest")$("pfile").click()};
+$("premove").onclick=()=>setPic("");
+$("pfile").onchange=async e=>{
+ const f=e.target.files&&e.target.files[0];e.target.value="";if(!f||uid==="guest")return;
+ $("perr").textContent="";
+ try{
+  if(!/^image\//.test(f.type))throw 0;
+  const url=URL.createObjectURL(f);
+  const img=await new Promise((res,rej)=>{const im=new Image();im.onload=()=>res(im);im.onerror=rej;im.src=url});
+  URL.revokeObjectURL(url);
+  const S=128,c=document.createElement("canvas");c.width=c.height=S;
+  const m=Math.min(img.naturalWidth,img.naturalHeight),sx=(img.naturalWidth-m)/2,sy=(img.naturalHeight-m)/2;
+  c.getContext("2d").drawImage(img,sx,sy,m,m,0,0,S,S);
+  setPic(c.toDataURL("image/jpeg",.85));
+ }catch(_){$("perr").textContent=PT("pic_err")}};
+async function cropFile(f){
+ if(!/^image\//.test(f.type))throw 0;
+ const url=URL.createObjectURL(f);
+ const img=await new Promise((res,rej)=>{const im=new Image();im.onload=()=>res(im);im.onerror=rej;im.src=url});
+ URL.revokeObjectURL(url);
+ const S=128,c=document.createElement("canvas");c.width=c.height=S;
+ const m=Math.min(img.naturalWidth,img.naturalHeight),sx=(img.naturalWidth-m)/2,sy=(img.naturalHeight-m)/2;
+ c.getContext("2d").drawImage(img,sx,sy,m,m,0,0,S,S);
+ return c.toDataURL("image/jpeg",.85)}
+function offerPic(){
+ if(!uid||uid==="guest")return;const u=users()[uid]||{};
+ setAv($("ppav"),u.name,"");$("ppt").textContent=PT("pp_t");$("pps").textContent=PT("pp_s");
+ $("ppadd").textContent=PT("pic_add");$("ppskip").textContent=PT("pp_skip");$("pperr").textContent="";
+ lock();$("pp").classList.remove("hide");$("ppadd").focus()}
+function closePP(){$("pp").classList.add("hide");unlock()}
+$("ppadd").onclick=()=>$("pfile3").click();
+$("ppskip").onclick=closePP;
+$("pfile3").onchange=async e=>{
+ const f=e.target.files&&e.target.files[0];e.target.value="";if(!f||!uid||uid==="guest")return;
+ try{const pic=await cropFile(f),U=users();if(!U[uid])return;U[uid].pic=pic;if(!saveUsers(U))throw 0;setAv($("av"),U[uid].name,pic);closePP()}
+ catch(_){$("pperr").textContent=PT("pic_err")}};
+function closeStats(fromPop){$("stats").classList.add("hide");unlock();statsOpen=false;if(fromPop)statsPushed=false;else popStats()}
+window.addEventListener("popstate",()=>{if(statsOpen)closeStats(true)});
+function leave(){
+ statsOpen=false;popStats();uid=null;D=blank();lsDel("session");setAv($("av"),"","");i=0;coins=0;showCoins(false);
+ $("stats").classList.add("hide");$("puzzle").classList.remove("hide");$("draw").classList.add("hide");
+ $("aemail").value="";$("apw").value="";$("aname").value="";applyLang();showAuth()}
+$("me").onclick=()=>showStats();$("sclose").onclick=()=>closeStats();$("slogout").onclick=leave;
+$("sdel").onclick=()=>{
+ const b=$("sdel");
+ if(b.dataset.arm!=="1"){b.dataset.arm="1";b.textContent=CH("s_del2");setTimeout(()=>{if(b.dataset.arm==="1"){b.dataset.arm="";b.textContent=CH("s_del")}},4000);return}
+ if(uid!=="guest"){const U=users();delete U[uid];saveUsers(U)}
+ lsDel("data:"+uid);leave()};
+document.addEventListener("keydown",e=>{if(e.key==="Escape"&&!$("stats").classList.contains("hide"))closeStats()});
+document.addEventListener("focusin",e=>{const t=e.target;if(t&&t.matches&&t.matches("input:not([type=file])"))setTimeout(()=>{try{t.scrollIntoView({block:"center",behavior:"smooth"})}catch(_){}},350)});
+
+/* Dismiss the on-screen keyboard: tap anywhere outside a field, or press Done/Enter in the username box */
+document.addEventListener("pointerdown",e=>{const a=document.activeElement;if(a&&a.tagName==="INPUT"&&!e.target.closest("input,label,select"))a.blur()});
+$("aname").addEventListener("keydown",e=>{if(e.key==="Enter"){e.preventDefault();e.target.blur()}});
+/* Terms gate, then account screen */
+lock();
+if(lsGet("tos2")==="1"){$("gate").classList.add("hide");startFlow()}
+else{$("gate").classList.remove("hide");
+ $("gbtn").onclick=()=>{lsSet("tos2","1");const g=$("gate");$("gbtn").disabled=true;g.classList.add("out");startFlow();setTimeout(()=>{g.classList.add("hide");g.classList.remove("out");$("gbtn").disabled=false},320)};
+ $("gbtn").focus()}
+applyLang();
+try{const s=localStorage.getItem("lang")||lang;if(s!=="en"&&(NAMES[s]||MORE.some(m=>m[0]===s))){loadLang(s).then(ok=>{if(ok){lang=s;applyLang()}})}}catch(_){}
+</script>
+</body>
+</html>
+
+</body></html>
