@@ -71,6 +71,12 @@ body.locked main{opacity:.55;pointer-events:none;user-select:none}
 .gck input{width:22px;height:22px;margin:1px 0 0;flex:none;accent-color:var(--accent)}
 .btn:disabled{opacity:.45;cursor:not-allowed}
 .hide{display:none!important}
+#tr{position:fixed;left:50%;top:calc(14px + env(safe-area-inset-top,0px));transform:translateX(-50%);z-index:100;display:flex;align-items:center;gap:10px;max-width:calc(100% - 32px);background:var(--accent);color:var(--on-accent);font-weight:700;padding:12px 18px;border-radius:999px;box-shadow:0 6px 24px rgba(0,0,0,.35);text-align:center}
+#tr.bad{background:var(--bad);color:#fff}
+#tr .spin{width:16px;height:16px;border-radius:50%;border:3px solid currentColor;border-right-color:transparent;flex:none;animation:trspin .8s linear infinite}
+#tr.bad .spin{display:none}
+@keyframes trspin{to{transform:rotate(360deg)}}
+@media (prefers-reduced-motion:reduce){#tr .spin{animation:none}}
 /* smooth transitions */
 @keyframes ucIn{from{opacity:0;transform:translateY(14px) scale(.985)}to{opacity:1;transform:none}}
 @keyframes ucFade{from{opacity:0}to{opacity:1}}
@@ -119,7 +125,7 @@ main{transition:opacity .45s ease,filter .45s ease}
 <body class="locked">
 <main>
   <div class="top">
-  <select id="lang" class="lsel" aria-label="Language"><option value="en">English</option><option value="de">Deutsch</option><option value="fr">Français</option><option value="it">Italiano (Svizzera)</option><option value="es">Español</option><option value="no">Norsk</option><option value="sv">Svenska</option><option value="nl">Nederlands</option><option value="pt">Português</option><option value="gsw">Schwiizertüütsch (Swiss)</option></select>
+  <select id="lang" class="lsel" aria-label="Language"><option value="en">English</option><option value="de">Deutsch</option><option value="fr">Français</option><option value="it">Italiano (Svizzera)</option><option value="es">Español</option><option value="no">Norsk</option><option value="sv">Svenska</option><option value="nl">Nederlands</option><option value="pt">Português</option><option value="gsw">Schwiizertüütsch</option></select>
   <div class="coins" id="coinbox" role="status" aria-label="Coins"><span class="coin" aria-hidden="true">★&#xFE0E;</span><span id="coins">0</span></div>
   </div>
   <button class="chip" id="me" type="button" aria-label="Your stats"><span class="av" id="av" aria-hidden="true"></span><span class="nm" id="mename"></span><span data-i="s_chip" data-pre="· " style="color:var(--muted);font-weight:500">· Stats</span></button>
@@ -143,6 +149,8 @@ main{transition:opacity .45s ease,filter .45s ease}
     <button class="btn hide" id="next">Next puzzle</button>
   </section>
 </main>
+
+<div id="tr" class="hide" role="status" aria-live="polite"><span class="spin" aria-hidden="true"></span><span id="trt"></span></div>
 
 <div id="gate" role="dialog" aria-modal="true" aria-labelledby="gt">
   <div class="gbox">
@@ -350,6 +358,11 @@ Object.assign(UI.sv,{pic_change:"Byt bild",pic_add:"Lägg till bild",pic_remove:
 Object.assign(UI.nl,{pic_change:"Foto wijzigen",pic_add:"Foto toevoegen",pic_remove:"Foto verwijderen",pic_err:"Die afbeelding werkt niet. Probeer een andere."});
 Object.assign(UI.pt,{pic_change:"Trocar foto",pic_add:"Adicionar foto",pic_remove:"Remover foto",pic_err:"Não foi possível usar essa imagem. Tente outra."});
 const PT=k=>(UI[lang]&&UI[lang][k])||UI.en[k];
+/* Messages (toasts, errors) in every built-in language. Other languages get them through the Claude translation, which sends UI.en. */
+{const K=["tosnote", "m_tr", "m_busy", "m_fail", "m_again", "er_not_granted", "er_sampling_disabled", "er_rate_limited", "er_session_expired", "er_no_sample", "er_not_declared", "n_len", "n_chars", "n_bad", "x_crypto", "x_exists", "x_save", "x_wrong", "x_gsetup", "x_gload", "x_gfail"],M={"en": ["(The full Terms are in English.)", "Translating…", "Busy, retrying in a moment…", "Couldn’t load that language.", "Please try again.", "Please allow Claude to translate when asked.", "Translation isn’t available for this account.", "Too many requests. Wait a moment.", "Please sign in to Claude again.", "Translation is only available on the published page.", "Translation isn’t turned on for this page.", "Username must be 3–20 characters.", "Use only letters, numbers, spaces, . _ or -.", "That username isn’t allowed. Please pick a kind one: no hateful or discriminatory names.", "Email sign-in isn’t available in this browser.", "That email already has an account. Try logging in.", "Couldn’t save the account on this device. Is private browsing on?", "Something went wrong. Please try again.", "Google sign-in isn’t set up yet.", "Google is still loading. Try again in a moment.", "Google sign-in didn’t work. Please try again."], "de": ["(Die vollständigen Bedingungen sind auf Englisch.)", "Übersetze…", "Gerade viel los, gleich nochmal…", "Diese Sprache konnte nicht geladen werden.", "Bitte versuche es nochmal.", "Bitte erlaube Claude das Übersetzen, wenn du gefragt wirst.", "Die Übersetzung ist für dieses Konto nicht verfügbar.", "Zu viele Anfragen. Warte einen Moment.", "Bitte melde dich bei Claude erneut an.", "Die Übersetzung ist nur auf der veröffentlichten Seite verfügbar.", "Die Übersetzung ist für diese Seite nicht aktiviert.", "Der Benutzername muss 3–20 Zeichen haben.", "Nur Buchstaben, Zahlen, Leerzeichen, . _ oder - verwenden.", "Dieser Benutzername ist nicht erlaubt. Bitte wähle einen freundlichen: keine hasserfüllten oder diskriminierenden Namen.", "Die Anmeldung per E-Mail ist in diesem Browser nicht verfügbar.", "Für diese E-Mail gibt es schon ein Konto. Versuche dich anzumelden.", "Das Konto konnte auf diesem Gerät nicht gespeichert werden. Ist der private Modus an?", "Etwas ist schiefgelaufen. Bitte versuche es nochmal.", "Die Anmeldung mit Google ist noch nicht eingerichtet.", "Google lädt noch. Versuche es gleich nochmal.", "Die Anmeldung mit Google hat nicht geklappt. Bitte versuche es nochmal."], "gsw": ["(D ganze Bedingige sind uf Änglisch.)", "Am Übersetze…", "Grad viel los, es gaat gli nomal…", "Die Sprach het sich nöd lade lah.", "Bitte probier s nomal.", "Bitte erlaub Claude z übersetze, wänn s dich frögt.", "D Übersetzig isch für das Konto nöd verfüegbar.", "Z viel Aafrage. Wart churz.", "Bitte meld di nomal bi Claude aa.", "D Übersetzig gits nur uf der veröffentlichte Site.", "D Übersetzig isch für die Site nöd aagschaltet.", "De Benutzername muess 3–20 Zeiche ha.", "Bruch nur Buechstabe, Zahle, Leerzeiche, . _ oder -.", "De Benutzername isch nöd erlaubt. Bitte wähl en fründliche: keini hässige oder diskriminierende Näme.", "D Aamäldig mit E-Mail gaat i dem Browser nöd.", "Für die E-Mail gits scho es Konto. Probier di aazmälde.", "S Konto het sich uf dem Gerät nöd chöne spichere. Isch de privati Modus aa?", "Es isch öppis schiefgange. Bitte probier s nomal.", "D Aamäldig mit Google isch no nöd igrichtet.", "Google lädt na. Probier s grad nomal.", "D Aamäldig mit Google het nöd klappet. Bitte probier s nomal."], "fr": ["(Les conditions complètes sont en anglais.)", "Traduction…", "Un peu de monde, nouvel essai dans un instant…", "Impossible de charger cette langue.", "Réessaie.", "Autorise Claude à traduire quand on te le demande.", "La traduction n’est pas disponible pour ce compte.", "Trop de demandes. Attends un instant.", "Reconnecte-toi à Claude.", "La traduction n’est disponible que sur la page publiée.", "La traduction n’est pas activée pour cette page.", "Le nom d’utilisateur doit contenir 3 à 20 caractères.", "Utilise uniquement des lettres, des chiffres, des espaces, . _ ou -.", "Ce nom d’utilisateur n’est pas autorisé. Choisis-en un gentil : pas de noms haineux ou discriminatoires.", "La connexion par e-mail n’est pas disponible dans ce navigateur.", "Cet e-mail a déjà un compte. Essaie de te connecter.", "Impossible d’enregistrer le compte sur cet appareil. La navigation privée est-elle activée ?", "Une erreur s’est produite. Réessaie.", "La connexion avec Google n’est pas encore configurée.", "Google est encore en cours de chargement. Réessaie dans un instant.", "La connexion avec Google n’a pas fonctionné. Réessaie."], "it": ["(I termini completi sono in inglese.)", "Traduzione in corso…", "Occupato, riprovo tra un attimo…", "Impossibile caricare questa lingua.", "Riprova.", "Consenti a Claude di tradurre quando richiesto.", "La traduzione non è disponibile per questo account.", "Troppe richieste. Attendi un momento.", "Accedi di nuovo a Claude.", "La traduzione è disponibile solo sulla pagina pubblicata.", "La traduzione non è attiva per questa pagina.", "Il nome utente deve avere 3–20 caratteri.", "Usa solo lettere, numeri, spazi, . _ o -.", "Questo nome utente non è consentito. Scegline uno gentile: niente nomi offensivi o discriminatori.", "L’accesso con e-mail non è disponibile in questo browser.", "Questa e-mail ha già un account. Prova ad accedere.", "Impossibile salvare l’account su questo dispositivo. La navigazione privata è attiva?", "Qualcosa è andato storto. Riprova.", "L’accesso con Google non è ancora configurato.", "Google si sta ancora caricando. Riprova tra un attimo.", "L’accesso con Google non ha funzionato. Riprova."], "es": ["(Los términos completos están en inglés.)", "Traduciendo…", "Ocupado, reintentando en un momento…", "No se pudo cargar ese idioma.", "Inténtalo de nuevo.", "Permite que Claude traduzca cuando te lo pida.", "La traducción no está disponible para esta cuenta.", "Demasiadas solicitudes. Espera un momento.", "Vuelve a iniciar sesión en Claude.", "La traducción solo está disponible en la página publicada.", "La traducción no está activada para esta página.", "El nombre de usuario debe tener 3–20 caracteres.", "Usa solo letras, números, espacios, . _ o -.", "Ese nombre de usuario no está permitido. Elige uno amable: sin nombres de odio o discriminatorios.", "El inicio de sesión con correo no está disponible en este navegador.", "Ese correo ya tiene una cuenta. Prueba a iniciar sesión.", "No se pudo guardar la cuenta en este dispositivo. ¿Está activada la navegación privada?", "Algo salió mal. Inténtalo de nuevo.", "El inicio de sesión con Google aún no está configurado.", "Google aún se está cargando. Inténtalo de nuevo en un momento.", "El inicio de sesión con Google no funcionó. Inténtalo de nuevo."], "no": ["(De fullstendige vilkårene er på engelsk.)", "Oversetter…", "Travelt, prøver igjen om et øyeblikk…", "Kunne ikke laste dette språket.", "Prøv igjen.", "Tillat at Claude oversetter når du blir spurt.", "Oversettelse er ikke tilgjengelig for denne kontoen.", "For mange forespørsler. Vent litt.", "Logg inn på Claude igjen.", "Oversettelse er bare tilgjengelig på den publiserte siden.", "Oversettelse er ikke slått på for denne siden.", "Brukernavnet må ha 3–20 tegn.", "Bruk bare bokstaver, tall, mellomrom, . _ eller -.", "Dette brukernavnet er ikke tillatt. Velg et snilt navn: ingen hatefulle eller diskriminerende navn.", "Pålogging med e-post er ikke tilgjengelig i denne nettleseren.", "Denne e-posten har allerede en konto. Prøv å logge inn.", "Kunne ikke lagre kontoen på denne enheten. Er privat surfing på?", "Noe gikk galt. Prøv igjen.", "Pålogging med Google er ikke satt opp ennå.", "Google laster fortsatt. Prøv igjen om et øyeblikk.", "Pålogging med Google fungerte ikke. Prøv igjen."], "sv": ["(De fullständiga villkoren är på engelska.)", "Översätter…", "Upptaget, försöker igen om en stund…", "Det gick inte att ladda språket.", "Försök igen.", "Tillåt att Claude översätter när du blir tillfrågad.", "Översättning är inte tillgänglig för det här kontot.", "För många förfrågningar. Vänta en stund.", "Logga in på Claude igen.", "Översättning finns bara på den publicerade sidan.", "Översättning är inte aktiverad för den här sidan.", "Användarnamnet måste ha 3–20 tecken.", "Använd bara bokstäver, siffror, mellanslag, . _ eller -.", "Det användarnamnet är inte tillåtet. Välj ett snällt namn: inga hatiska eller diskriminerande namn.", "Inloggning med e-post är inte tillgänglig i den här webbläsaren.", "Den e-postadressen har redan ett konto. Försök logga in.", "Det gick inte att spara kontot på den här enheten. Är privat surfning på?", "Något gick fel. Försök igen.", "Inloggning med Google är inte konfigurerad ännu.", "Google laddas fortfarande. Försök igen om en stund.", "Inloggningen med Google fungerade inte. Försök igen."], "nl": ["(De volledige voorwaarden zijn in het Engels.)", "Vertalen…", "Het is druk, zo opnieuw proberen…", "Die taal kon niet worden geladen.", "Probeer het opnieuw.", "Sta toe dat Claude vertaalt als er wordt gevraagd.", "Vertalen is niet beschikbaar voor dit account.", "Te veel verzoeken. Wacht even.", "Log opnieuw in bij Claude.", "Vertalen is alleen beschikbaar op de gepubliceerde pagina.", "Vertalen is niet ingeschakeld voor deze pagina.", "De gebruikersnaam moet 3–20 tekens hebben.", "Gebruik alleen letters, cijfers, spaties, . _ of -.", "Die gebruikersnaam is niet toegestaan. Kies een aardige naam: geen haatdragende of discriminerende namen.", "Inloggen met e-mail is niet beschikbaar in deze browser.", "Dit e-mailadres heeft al een account. Probeer in te loggen.", "Het account kon niet op dit apparaat worden bewaard. Staat privé browsen aan?", "Er ging iets mis. Probeer het opnieuw.", "Inloggen met Google is nog niet ingesteld.", "Google wordt nog geladen. Probeer het zo opnieuw.", "Inloggen met Google is niet gelukt. Probeer het opnieuw."], "pt": ["(Os termos completos estão em inglês.)", "Traduzindo…", "Ocupado, tentando de novo em instantes…", "Não foi possível carregar esse idioma.", "Tente de novo.", "Permita que o Claude traduza quando for solicitado.", "A tradução não está disponível para esta conta.", "Muitas solicitações. Aguarde um momento.", "Entre no Claude novamente.", "A tradução só está disponível na página publicada.", "A tradução não está ativada para esta página.", "O nome de usuário deve ter de 3 a 20 caracteres.", "Use apenas letras, números, espaços, . _ ou -.", "Esse nome de usuário não é permitido. Escolha um gentil: sem nomes de ódio ou discriminatórios.", "O login por e-mail não está disponível neste navegador.", "Esse e-mail já tem uma conta. Tente entrar.", "Não foi possível salvar a conta neste dispositivo. A navegação privada está ativada?", "Algo deu errado. Tente de novo.", "O login com Google ainda não está configurado.", "O Google ainda está carregando. Tente de novo em instantes.", "O login com Google não funcionou. Tente de novo."]};
+ for(const c in M){K.forEach((k,n)=>UI[c][k]=M[c][n]);UI[c].x_asetup=UI[c].x_gsetup.replace(/Google/g,"Apple");UI[c].x_aload=UI[c].x_gload.replace(/Google/g,"Apple");UI[c].x_afail=UI[c].x_gfail.replace(/Google/g,"Apple")}}
+{const GB={en:"Google sign-in only works on the full website, not on this page. Please use email or play as a guest for now.",de:"Die Anmeldung mit Google funktioniert nur auf der vollständigen Website, nicht auf dieser Seite. Nutze vorerst E-Mail oder spiele als Gast.",gsw:"D Aamäldig mit Google gaat nur uf der volle Websiite, nöd uf dere Site. Nimm vorläufig E-Mail oder spil als Gascht.",fr:"La connexion avec Google ne fonctionne que sur le site complet, pas sur cette page. Utilise l’e-mail ou joue en invité pour l’instant.",it:"L’accesso con Google funziona solo sul sito completo, non su questa pagina. Per ora usa l’e-mail o gioca come ospite.",es:"El inicio de sesión con Google solo funciona en el sitio web completo, no en esta página. Por ahora usa el correo o juega como invitado.",no:"Pålogging med Google fungerer bare på det fullstendige nettstedet, ikke på denne siden. Bruk e-post eller spill som gjest foreløpig.",sv:"Inloggning med Google fungerar bara på hela webbplatsen, inte på den här sidan. Använd e-post eller spela som gäst så länge.",nl:"Inloggen met Google werkt alleen op de volledige website, niet op deze pagina. Gebruik voorlopig e-mail of speel als gast.",pt:"O login com Google só funciona no site completo, não nesta página. Por enquanto, use e-mail ou jogue como convidado."};for(const c in GB)UI[c].x_gblock=GB[c]}
+const erTxt=c=>PT("er_"+({capability_disabled:"not_declared",capability_removed:"not_declared"}[c]||c))||PT("m_again");
 function setAv(el,name,pic){el.textContent="";if(pic){const im=document.createElement("img");im.alt="";im.src=pic;el.appendChild(im)}else el.textContent=(String(name||"").trim().charAt(0)||"?").toUpperCase()}
 const GR={};
 function T(n){const p=PUZZLES[n];if(lang==="en")return p;const t=TR[lang][n];return{...p,g:GR[lang]?GR[lang][n]:n<12?G[lang](n+1):U().college,q:t[0],o:t[1]||p.o}}
@@ -421,7 +434,7 @@ function applyLang(){
   if(filled<total)status();else $("dhint").textContent=U().done;
  }else showPuzzle();
 }
-const MORE=[["bar","Österreichisch (Austrian)","spoken Austrian (Austro-Bavarian, casual Viennese-style Umgangssprache) the way Austrians really talk and text each other, e.g. 'Servus', 'leiwand', 'ned/net' instead of 'nicht', 'heast', 'a bissl', 'Sackerl', 'Paradeiser', 'Erdäpfel', 'Jänner', 'schau' , 'gscheit', dropped word endings like 'is' for 'ist' and 'host' for 'hast'; friendly and readable for kids, NOT standard High German"],["sq","Shqip","Albanian"],["eu","Euskara","Basque"],["be","Беларуская","Belarusian"],["bs","Bosanski","Bosnian"],["bg","Български","Bulgarian"],["ca","Català","Catalan"],["hr","Hrvatski","Croatian"],["cs","Čeština","Czech"],["da","Dansk","Danish"],["et","Eesti","Estonian"],["fi","Suomi","Finnish"],["gl","Galego","Galician"],["el","Ελληνικά","Greek"],["hu","Magyar","Hungarian"],["is","Íslenska","Icelandic"],["ga","Gaeilge","Irish"],["lv","Latviešu","Latvian"],["lt","Lietuvių","Lithuanian"],["lb","Lëtzebuergesch","Luxembourgish"],["mk","Македонски","Macedonian"],["mt","Malti","Maltese"],["pl","Polski","Polish"],["ro","Română","Romanian"],["rm","Rumantsch","Romansh (Swiss)"],["ru","Русский","Russian"],["sr-Latn","Srpski (latinica)","Serbian written in the Latin alphabet (latinica), not Cyrillic"],["sr","Српски (ћирилица)","Serbian written in the Cyrillic alphabet (ćirilica)"],["sk","Slovenčina","Slovak"],["sl","Slovenščina","Slovenian"],["tr","Türkçe","Turkish"],["uk","Українська","Ukrainian"],["cy","Cymraeg","Welsh"]];
+const MORE=[["bar","Österreichisch","spoken Austrian (Austro-Bavarian, casual Viennese-style Umgangssprache) the way Austrians really talk and text each other, e.g. 'Servus', 'leiwand', 'ned/net' instead of 'nicht', 'heast', 'a bissl', 'Sackerl', 'Paradeiser', 'Erdäpfel', 'Jänner', 'schau' , 'gscheit', dropped word endings like 'is' for 'ist' and 'host' for 'hast'; friendly and readable for kids, NOT standard High German"],["sq","Shqip","Albanian"],["eu","Euskara","Basque"],["be","Беларуская","Belarusian"],["bs","Bosanski","Bosnian"],["bg","Български","Bulgarian"],["ca","Català","Catalan"],["hr","Hrvatski","Croatian"],["cs","Čeština","Czech"],["da","Dansk","Danish"],["et","Eesti","Estonian"],["fi","Suomi","Finnish"],["gl","Galego","Galician"],["el","Ελληνικά","Greek"],["hu","Magyar","Hungarian"],["is","Íslenska","Icelandic"],["ga","Gaeilge","Irish"],["lv","Latviešu","Latvian"],["lt","Lietuvių","Lithuanian"],["lb","Lëtzebuergesch","Luxembourgish"],["mk","Македонски","Macedonian"],["mt","Malti","Maltese"],["pl","Polski","Polish"],["ro","Română","Romanian"],["rm","Rumantsch","Romansh (Swiss)"],["ru","Русский","Russian"],["sr-Latn","Srpski (latinica)","Serbian written in the Latin alphabet (latinica), not Cyrillic"],["sr","Српски (ћирилица)","Serbian written in the Cyrillic alphabet (ćirilica)"],["sk","Slovenčina","Slovak"],["sl","Slovenščina","Slovenian"],["tr","Türkçe","Turkish"],["uk","Українська","Ukrainian"],["cy","Cymraeg","Welsh"]];
 {MORE.forEach(([c,n])=>{const o=document.createElement("option");o.value=c;o.textContent=n;$("lang").appendChild(o)});
  const sel=$("lang"),opts=[...sel.options],en=opts.shift();opts.sort((a,b)=>a.textContent.localeCompare(b.textContent,"en"));sel.innerHTML="";[en,...opts].forEach(o=>sel.appendChild(o));document.querySelectorAll(".lsel").forEach(x=>{if(x!==sel)x.innerHTML=sel.innerHTML})}
 /* Every language except English is translated by Claude when chosen. The built-in
@@ -433,8 +446,7 @@ function store(c,r){UI[c]=r.UI;GR[c]=r.G;TR[c]=r.P.map(p=>[p.q,p.o]);viaClaude.a
 let lastErr="";
 const FATAL=new Set(["not_granted","sampling_disabled","not_declared","capability_disabled","capability_removed","session_expired","invalid_request","prompt_too_large"]);
 const errCode=e=>(e&&(e.code||e.message))||"error";
-const ERRTXT={not_granted:"Please allow Claude to translate when asked.",sampling_disabled:"Translation isn’t available for this account.",rate_limited:"Too many requests. Wait a moment.",session_expired:"Please sign in to Claude again.",no_sample:"Translation is only available on the published page."};
-const prog=t=>{$("sub").textContent=t;const g=document.querySelector("#gate [data-i=tos_s]");if(g)g.textContent=t};
+const prog=t=>{$("sub").textContent=t;if(!$("tr").classList.contains("hide")&&!$("tr").classList.contains("bad"))$("trt").textContent=t;const g=document.querySelector("#gate [data-i=tos_s]");if(g)g.textContent=t};
 async function loadLang(c){
  if(c==="en"||viaClaude.has(c))return true;
  const fb=!!UI[c];
@@ -447,51 +459,156 @@ function cleanTos(h){
  (function w(n){[...n.children].forEach(e=>{if(!ok.includes(e.tagName)){e.replaceWith(document.createTextNode(e.textContent));return}[...e.attributes].forEach(a=>e.removeAttribute(a.name));w(e)})})(d);
  return d.innerHTML}
 async function loadTos(c){
- if(TOSX[c])return;
+ if(TOSB[c]||TOSX[c])return;
  try{const s=localStorage.getItem("tos4:"+c);if(s){TOSX[c]=s;return}}catch(_){}
  const name=NAMES[c]||(MORE.find(m=>m[0]===c)||[])[2];if(!name)return;
  let sample=null;try{sample=await claude.use("sample")}catch(_){}if(!sample)return;
- prog("Translating… 4/4");
+ prog(PT("m_tr")+" 4/4");
  for(let k=0;k<2;k++){
   try{const r=await sample.json("Translate the text values of this HTML Terms of Service into "+name+". Keep every HTML tag exactly as is (p, h3, ul, li, em), the order, the numbering of headings, the company name Techno Creative Company, the email address, and legal terms like FADP. Reply with only JSON of the form {\"T\":\"<translated html>\"}, nothing else.\n"+JSON.stringify({T:TOS_EN}),{cache:false});
    const t=r&&typeof r.T==="string"?cleanTos(r.T):"";
    if((t.match(/<h3>/g)||[]).length===11&&t.length>800){TOSX[c]=t;try{localStorage.setItem("tos4:"+c,t)}catch(_){}return}}
   catch(e){if(FATAL.has(errCode(e)))return}}}
+/* Built-in Terms of Service translations (no network needed). Swiss German uses the written German text. */
+const TOSB={
+de:`<p><em>Zuletzt aktualisiert: 17. November 2026</em></p>
+<p>Diese Bedingungen gelten für deine Nutzung von Unlock &amp; Color (das «Spiel»), das von der Techno Creative Company («wir», «uns») bereitgestellt wird. Mit der Nutzung des Spiels stimmst du ihnen zu. Wenn du unter 18 bist, lies sie bitte zusammen mit einem Elternteil oder Erziehungsberechtigten durch.</p>
+<h3>1. Was das Spiel ist</h3>
+<p>Unlock &amp; Color ist ein kostenloses Lernspiel. Die Spielenden lösen Rätsel von der ersten Klasse bis zum Hochschulniveau, und jede richtige Antwort schaltet ein Malen-nach-Zahlen-Bild frei. Das Spiel kann virtuelle Münzen enthalten. Münzen sind nur ein Spielpunktestand zum Spass: Sie haben keinen Geldwert, können nicht gekauft, verkauft, übertragen oder gegen Geld oder etwas anderes eingetauscht werden und können jederzeit zurückgesetzt oder entfernt werden. Das Spiel dient dem Spass und dem allgemeinen Lernen, nicht als Lehrplan oder Prüfung.</p>
+<h3>2. Wer es nutzen darf</h3>
+<p>Das Spiel ist für alle Altersgruppen. Spielende unter 18 sollten es mit der Erlaubnis eines Elternteils oder Erziehungsberechtigten nutzen. Du brauchst kein Konto: Du kannst als Gast spielen. Optional kannst du ein Konto (mit E-Mail, Google oder Apple) erstellen, um deinen Fortschritt und deine Statistiken zu speichern.</p>
+<h3>3. Deine Informationen</h3>
+<ul>
+<li>Du kannst als Gast spielen, ohne persönliche Angaben zu machen. Wenn du ein Konto erstellst, speichert das Spiel deinen Namen, deine E-Mail-Adresse (oder die von Google bzw. Apple gelieferte Benutzer-ID), ein optionales Profilbild (nur Konten, nicht Gäste) sowie deinen Fortschritt, deine Münzen und Statistiken. In dieser Version des Spiels wird dies nur auf deinem eigenen Gerät im lokalen Speicher deines Browsers abgelegt und nicht an unsere Server gesendet. Personendaten werden gemäss dem Schweizer Bundesgesetz über den Datenschutz (DSG) bearbeitet.</li>
+<li>Wenn du dich mit Google oder Apple anmeldest, wirst du zu diesem Anbieter weitergeleitet, der deine Anmeldung nach seiner eigenen Datenschutzerklärung abwickelt und dem Spiel deinen Namen, deine E-Mail-Adresse und eine Benutzer-ID mitteilt. Dein Google- oder Apple-Passwort sehen wir nie. Bei E-Mail-Konten wird dein Passwort nur auf deinem Gerät und nur in verschlüsselter (gehashter) Form gespeichert.</li>
+<li>Du kannst dich jederzeit im Statistik-Bildschirm abmelden oder dein Konto samt allen gespeicherten Daten löschen. Auch das Löschen der Browserdaten entfernt sie.</li>
+<li>Dein Browser kann deine Sprachwahl, deinen Münzstand, angeforderte Übersetzungen und deine Zustimmung zu diesen Bedingungen auf deinem Gerät speichern (lokaler Speicher). Dies dient nur dazu, das Spiel funktionsfähig zu machen und deine Auswahl zu merken. Du kannst es jederzeit in den Browsereinstellungen löschen.</li>
+<li>Einige Sprachen werden auf Anfrage automatisch übersetzt. Dabei wird nur der Text des Spiels selbst zur Übersetzung gesendet; das Spiel hat keine Textfelder für Eingaben, daher wird nichts gesendet, was du tippst. Der Übersetzungsdienst kann diesen Text auch ausserhalb der Schweiz verarbeiten.</li>
+<li>Das Spiel wird von einem externen Webhoster betrieben, der nach seiner eigenen Datenschutzerklärung technische Angaben wie deine IP-Adresse erfassen kann. Dies kann eine Bearbeitung ausserhalb der Schweiz beinhalten.</li>
+</ul>
+<h3>4. Zulässige Nutzung</h3>
+<p>Bitte versuche nicht, das Spiel zu stören, zu überlasten oder zu manipulieren, es zu kopieren und als dein eigenes Werk auszugeben oder es für etwas Rechtswidriges zu nutzen. Benutzernamen dürfen keine rassistischen, hasserfüllten oder diskriminierenden Ausdrücke enthalten; wir können solche Namen ablehnen oder entfernen. Du darfst es spielen, den Link teilen und es im Unterricht oder zu Hause für nicht kommerzielle Zwecke nutzen.</p>
+<h3>5. Eigentum</h3>
+<p>Der Code, die Rätsel, die Bilder und das Design des Spiels gehören der Techno Creative Company, ausgenommen Werkzeuge Dritter, die ihren jeweiligen Eigentümern gehören. Du darfst das Spiel oder seine Inhalte nicht ohne unsere schriftliche Erlaubnis verkaufen.</p>
+<h3>6. Richtigkeit und Übersetzungen</h3>
+<p>Wir bemühen uns, die Rätsel korrekt und fair zu gestalten, doch Fehler können vorkommen. Automatische Übersetzungen können Fehler oder unbeholfene Formulierungen enthalten. Das Spiel ersetzt weder professionellen Unterricht noch professionelle Beratung.</p>
+<h3>7. Keine Gewährleistung</h3>
+<p>Das Spiel wird «wie besehen» und «wie verfügbar» bereitgestellt, ohne Zusicherung, dass es immer funktioniert, fehlerfrei oder verfügbar ist. Wir können es jederzeit ändern, pausieren oder entfernen.</p>
+<h3>8. Haftungsbeschränkung</h3>
+<p>Soweit nach schweizerischem Recht zulässig, haften wir nicht für Verluste oder Schäden aus der Nutzung des Spiels, das kostenlos angeboten wird. Wir haften weiterhin für Schäden, die durch rechtswidrige Absicht oder grobe Fahrlässigkeit verursacht wurden, für Verletzungen von Leben oder Gesundheit sowie überall dort, wo die Haftung nach zwingendem Recht nicht ausgeschlossen oder beschränkt werden kann (zum Beispiel nach dem Schweizer Produktehaftpflichtgesetz).</p>
+<h3>9. Änderungen</h3>
+<p>Wir können diese Bedingungen von Zeit zu Zeit aktualisieren. Wenn du das Spiel nach einer Aktualisierung weiter nutzt, akzeptierst du die neuen Bedingungen. Ist ein Teil dieser Bedingungen ungültig oder nicht durchsetzbar, bleibt der Rest in Kraft.</p>
+<h3>10. Anwendbares Recht</h3>
+<p>Diese Bedingungen unterstehen schweizerischem materiellem Recht unter Ausschluss seiner Kollisionsnormen und des UN-Kaufrechts. Soweit zwingendes Recht nichts anderes vorsieht (insbesondere für Konsumentinnen und Konsumenten, die ihre Ansprüche an ihrem Wohnsitz geltend machen können), sind die Gerichte am Sitz unseres Unternehmens in der Schweiz ausschliesslich zuständig.</p>
+<h3>11. Kontakt</h3>
+<p>Fragen? Wende dich an die Techno Creative Company, Schweiz, unter technocreativecompany@gmail.com.</p>`,
+fr:`<p><em>Dernière mise à jour : 17 novembre 2026</em></p>
+<p>Les présentes conditions s’appliquent à votre utilisation d’Unlock &amp; Color (le « Jeu »), fourni par Techno Creative Company (« nous »). En utilisant le Jeu, vous les acceptez. Si vous avez moins de 18 ans, demandez à un parent ou à un tuteur de les lire avec vous.</p>
+<h3>1. Ce qu’est le Jeu</h3>
+<p>Unlock &amp; Color est un jeu éducatif gratuit. Les joueurs résolvent des énigmes de la première année jusqu’au niveau universitaire, et chaque bonne réponse débloque un coloriage par numéros. Le Jeu peut comporter des pièces virtuelles. Les pièces ne sont qu’un score amusant dans le Jeu : elles n’ont aucune valeur monétaire, ne peuvent être ni achetées, ni vendues, ni transférées, ni échangées contre de l’argent ou autre chose, et peuvent être réinitialisées ou supprimées à tout moment. Le Jeu est destiné au divertissement et à l’apprentissage général, pas à servir de programme scolaire ou d’examen.</p>
+<h3>2. Qui peut l’utiliser</h3>
+<p>Le Jeu s’adresse à tous les âges. Les joueurs de moins de 18 ans doivent l’utiliser avec l’autorisation d’un parent ou d’un tuteur. Aucun compte n’est nécessaire : vous pouvez jouer en invité. Vous pouvez facultativement créer un compte (avec e-mail, Google ou Apple) pour enregistrer votre progression et vos statistiques.</p>
+<h3>3. Vos informations</h3>
+<ul>
+<li>Vous pouvez jouer en invité sans fournir de données personnelles. Si vous créez un compte, le Jeu enregistre votre nom, votre adresse e-mail (ou l’identifiant fourni par Google ou Apple), une photo de profil facultative (comptes uniquement, pas les invités), ainsi que votre progression, vos pièces et vos statistiques. Dans cette version du Jeu, ces données sont enregistrées uniquement sur votre appareil, dans le stockage local de votre navigateur ; elles ne sont pas envoyées à nos serveurs. Les données personnelles sont traitées conformément à la loi fédérale suisse sur la protection des données (LPD).</li>
+<li>Si vous vous connectez avec Google ou Apple, vous êtes redirigé vers ce fournisseur, qui gère votre connexion selon sa propre politique de confidentialité et communique au Jeu votre nom, votre adresse e-mail et un identifiant. Nous ne voyons jamais votre mot de passe Google ou Apple. Pour les comptes e-mail, votre mot de passe est enregistré uniquement sur votre appareil, sous forme brouillée (hachée).</li>
+<li>Vous pouvez vous déconnecter ou supprimer votre compte et toutes ses données enregistrées à tout moment depuis l’écran des statistiques. Effacer les données de votre navigateur les supprime aussi.</li>
+<li>Votre navigateur peut enregistrer sur votre appareil votre choix de langue, votre nombre de pièces, les traductions demandées et votre acceptation des présentes conditions (stockage local). Cela sert uniquement à faire fonctionner le Jeu et à mémoriser vos choix. Vous pouvez l’effacer à tout moment dans les paramètres du navigateur.</li>
+<li>Certaines langues sont traduites automatiquement à la demande. Seul le texte du Jeu est envoyé pour traduction ; le Jeu n’a pas de champ de saisie libre, donc rien de ce que vous tapez n’est envoyé. Le service de traduction peut traiter ce texte en dehors de la Suisse.</li>
+<li>Le Jeu est hébergé par un hébergeur web tiers, qui peut collecter des informations techniques telles que votre adresse IP selon sa propre politique de confidentialité. Cela peut impliquer un traitement en dehors de la Suisse.</li>
+</ul>
+<h3>4. Utilisation acceptable</h3>
+<p>Veuillez ne pas chercher à casser, surcharger ou perturber le Jeu, à le copier pour le présenter comme votre propre travail, ni à l’utiliser à des fins illicites. Les noms d’utilisateur ne doivent contenir aucun propos raciste, haineux ou discriminatoire ; nous pouvons refuser ou supprimer de tels noms. Vous pouvez y jouer, partager le lien et l’utiliser en classe ou à la maison à des fins non commerciales.</p>
+<h3>5. Propriété</h3>
+<p>Le code, les énigmes, les images et le design du Jeu appartiennent à Techno Creative Company, à l’exception des outils tiers, qui appartiennent à leurs propriétaires. Vous ne pouvez pas vendre le Jeu ou son contenu sans notre autorisation écrite.</p>
+<h3>6. Exactitude et traductions</h3>
+<p>Nous nous efforçons de rendre les énigmes correctes et équitables, mais des erreurs peuvent survenir. Les traductions automatiques peuvent contenir des erreurs ou des formulations maladroites. Le Jeu ne remplace ni un enseignement professionnel ni des conseils professionnels.</p>
+<h3>7. Absence de garantie</h3>
+<p>Le Jeu est fourni « en l’état » et « selon disponibilité », sans promesse qu’il fonctionnera toujours, sera exempt d’erreurs ou sera disponible. Nous pouvons le modifier, le suspendre ou le supprimer à tout moment.</p>
+<h3>8. Limitation de responsabilité</h3>
+<p>Dans la mesure permise par le droit suisse, nous ne sommes pas responsables des pertes ou dommages résultant de l’utilisation du Jeu, qui est offert gratuitement. Nous restons responsables des dommages causés par une intention illicite ou une négligence grave, des atteintes à la vie ou à la santé, et partout où la responsabilité ne peut être exclue ou limitée en vertu du droit impératif (par exemple la loi suisse sur la responsabilité du fait des produits).</p>
+<h3>9. Modifications</h3>
+<p>Nous pouvons mettre à jour ces conditions de temps à autre. Si vous continuez à utiliser le Jeu après une mise à jour, vous acceptez les nouvelles conditions. Si une partie de ces conditions est invalide ou inapplicable, le reste demeure en vigueur.</p>
+<h3>10. Droit applicable</h3>
+<p>Les présentes conditions sont régies par le droit matériel suisse, à l’exclusion de ses règles de conflit de lois et de la Convention des Nations Unies sur les contrats de vente internationale de marchandises. Sauf disposition impérative contraire (notamment pour les consommateurs, qui peuvent agir à leur lieu de résidence), les tribunaux du siège de notre société en Suisse ont compétence exclusive.</p>
+<h3>11. Contact</h3>
+<p>Des questions ? Contactez Techno Creative Company, Suisse, à technocreativecompany@gmail.com.</p>`,
+it:`<p><em>Ultimo aggiornamento: 17 novembre 2026</em></p>
+<p>I presenti Termini si applicano all’uso di Unlock &amp; Color (il «Gioco»), fornito da Techno Creative Company («noi»). Usando il Gioco li accetti. Se hai meno di 18 anni, chiedi a un genitore o tutore di leggerli insieme a te.</p>
+<h3>1. Cos’è il Gioco</h3>
+<p>Unlock &amp; Color è un gioco educativo gratuito. I giocatori risolvono enigmi dalla prima classe fino al livello universitario e ogni risposta corretta sblocca un disegno da colorare con i numeri. Il Gioco può includere monete virtuali. Le monete sono solo un punteggio per divertirsi all’interno del Gioco: non hanno alcun valore monetario, non possono essere acquistate, vendute, trasferite o scambiate con denaro o altro e possono essere azzerate o rimosse in qualsiasi momento. Il Gioco è pensato per divertirsi e per un apprendimento generale, non come programma scolastico o esame.</p>
+<h3>2. Chi può usarlo</h3>
+<p>Il Gioco è per tutte le età. I giocatori sotto i 18 anni dovrebbero usarlo con il permesso di un genitore o tutore. Non serve un account: puoi giocare come ospite. Se vuoi, puoi creare un account (con e-mail, Google o Apple) per salvare i tuoi progressi e le tue statistiche.</p>
+<h3>3. Le tue informazioni</h3>
+<ul>
+<li>Puoi giocare come ospite senza fornire dati personali. Se crei un account, il Gioco memorizza il tuo nome, il tuo indirizzo e-mail (o l’ID utente fornito da Google o Apple), un’immagine del profilo facoltativa (solo account, non ospiti) e i tuoi progressi, monete e statistiche. In questa versione del Gioco i dati sono salvati solo sul tuo dispositivo, nella memoria locale del browser; non vengono inviati ai nostri server. I dati personali sono trattati in conformità alla legge federale svizzera sulla protezione dei dati (LPD).</li>
+<li>Se accedi con Google o Apple, vieni indirizzato a quel fornitore, che gestisce l’accesso secondo la propria informativa sulla privacy e comunica al Gioco il tuo nome, il tuo indirizzo e-mail e un ID utente. Non vediamo mai la tua password di Google o Apple. Per gli account e-mail, la password è salvata solo sul tuo dispositivo in forma codificata (hash).</li>
+<li>Puoi uscire o eliminare il tuo account e tutti i dati salvati in qualsiasi momento dalla schermata delle statistiche. Anche cancellare i dati del browser li rimuove.</li>
+<li>Il tuo browser può salvare sul dispositivo la lingua scelta, il punteggio in monete, le traduzioni richieste e la tua accettazione di questi Termini (memoria locale). Serve solo a far funzionare il Gioco e a ricordare le tue scelte. Puoi cancellarlo in qualsiasi momento nelle impostazioni del browser.</li>
+<li>Alcune lingue sono tradotte automaticamente su richiesta. Viene inviato per la traduzione solo il testo del Gioco; il Gioco non ha campi di testo, quindi nulla di ciò che scrivi viene inviato. Il servizio di traduzione può elaborare questo testo al di fuori della Svizzera.</li>
+<li>Il Gioco è ospitato da un fornitore di hosting terzo, che può raccogliere informazioni tecniche come il tuo indirizzo IP secondo la propria informativa sulla privacy. Ciò può comportare un trattamento al di fuori della Svizzera.</li>
+</ul>
+<h3>4. Uso consentito</h3>
+<p>Non cercare di danneggiare, sovraccaricare o interferire con il Gioco, di copiarlo spacciandolo per tuo, né di usarlo per scopi illeciti. I nomi utente non devono contenere linguaggio razzista, offensivo o discriminatorio; possiamo rifiutare o rimuovere tali nomi. Puoi giocarci, condividere il link e usarlo in classe o a casa per scopi non commerciali.</p>
+<h3>5. Proprietà</h3>
+<p>Il codice, gli enigmi, le immagini e il design del Gioco appartengono a Techno Creative Company, tranne gli strumenti di terzi, che appartengono ai rispettivi proprietari. Non puoi vendere il Gioco o i suoi contenuti senza il nostro permesso scritto.</p>
+<h3>6. Correttezza e traduzioni</h3>
+<p>Cerchiamo di rendere gli enigmi corretti ed equi, ma possono verificarsi errori. Le traduzioni automatiche possono contenere errori o formulazioni goffe. Il Gioco non sostituisce un insegnamento o una consulenza professionale.</p>
+<h3>7. Nessuna garanzia</h3>
+<p>Il Gioco è fornito «così com’è» e «come disponibile», senza alcuna promessa che funzioni sempre, sia privo di errori o sia disponibile. Possiamo modificarlo, sospenderlo o rimuoverlo in qualsiasi momento.</p>
+<h3>8. Limitazione di responsabilità</h3>
+<p>Nella misura consentita dal diritto svizzero, non siamo responsabili di perdite o danni derivanti dall’uso del Gioco, offerto gratuitamente. Rimaniamo responsabili dei danni causati da dolo o colpa grave, delle lesioni alla vita o alla salute e in tutti i casi in cui la responsabilità non può essere esclusa o limitata dal diritto imperativo (ad esempio la legge svizzera sulla responsabilità per danno da prodotti).</p>
+<h3>9. Modifiche</h3>
+<p>Possiamo aggiornare questi Termini di tanto in tanto. Se continui a usare il Gioco dopo un aggiornamento, accetti i nuovi Termini. Se una parte di questi Termini è invalida o inapplicabile, il resto resta in vigore.</p>
+<h3>10. Diritto applicabile</h3>
+<p>I presenti Termini sono disciplinati dal diritto sostanziale svizzero, escluse le sue norme sui conflitti di leggi e la Convenzione delle Nazioni Unite sui contratti di vendita internazionale di merci. Salvo diversa disposizione imperativa (in particolare per i consumatori, che possono agire presso il proprio luogo di residenza), i tribunali della sede legale della nostra società in Svizzera hanno competenza esclusiva.</p>
+<h3>11. Contatti</h3>
+<p>Domande? Contatta Techno Creative Company, Svizzera, all’indirizzo technocreativecompany@gmail.com.</p>`};
+TOSB.gsw=TOSB.de;
 function applyTos(){
- const g=document.querySelector(".gtxt"),t=lang!=="en"&&TOSX[lang];
+ const g=document.querySelector(".gtxt"),t=lang!=="en"&&(TOSB[lang]||TOSX[lang]);
  g.innerHTML=t||TOS_EN;g.lang=t?lang:"en";
  const n=document.querySelector("#gate [data-i=tos_s]");
- if(lang!=="en"&&!t)n.textContent+=" (The full Terms are in English.)"}
+ if(lang!=="en"&&!t)n.textContent+=" "+PT("tosnote")}
 async function loadLang0(c){
  const name=NAMES[c]||(MORE.find(m=>m[0]===c)||[])[2];if(!name)return false;
  try{const s=localStorage.getItem("tr2:"+c);if(s){store(c,JSON.parse(s));return true}}catch(_){}
  lastErr="";
- let sample=null;try{sample=await claude.use("sample")}catch(_){}
- if(!sample){lastErr="no_sample";return false}
+ let sample=null;try{sample=await claude.use("sample")}catch(e){lastErr=(e&&e.name==="ReferenceError")?"no_sample":errCode(e)}
+ if(!sample){if(!lastErr)lastErr="no_sample";return false}
  const ask=async(part,check)=>{
   for(let k=0;k<2;k++){
    try{const r=await sample.json("Translate every string value in this JSON into "+name+" for a kids’ tech-puzzle game. Keep keys, array order, array lengths, {0}/{1} placeholders, numbers, code terms like CPU, DNS, O(n) and the word hello exactly as they are. Reply with only the JSON, nothing else.\n"+JSON.stringify(part),{cache:false});
-    if(r&&check(r))return r;lastErr="bad_reply"}catch(e){lastErr=errCode(e);if(FATAL.has(lastErr))return null;if(lastErr==="rate_limited"){prog("Busy, retrying in a moment…");await new Promise(r=>setTimeout(r,6000))}}
+    if(r&&check(r))return r;lastErr="bad_reply"}catch(e){lastErr=errCode(e);if(FATAL.has(lastErr))return null;if(lastErr==="rate_limited"){prog(PT("m_busy"));await new Promise(r=>setTimeout(r,6000))}}
    }
   return null};
  const N=PUZZLES.length,cut=7,ok=(r,a,b)=>Array.isArray(r.P)&&r.P.length===b-a&&r.P.every((p,k)=>typeof p.q==="string"&&Array.isArray(p.o)&&p.o.length===PUZZLES[a+k].o.length);
- prog("Translating… 1/4");
+ prog(PT("m_tr")+" 1/4");
  const A=await ask({UI:UI.en,G:PUZZLES.map(p=>p.g)},r=>r.UI&&typeof r.UI==="object"&&Array.isArray(r.G)&&r.G.length===N&&Object.keys(UI.en).every(k=>k in r.UI));
  if(!A)return false;
- prog("Translating… 2/4");
+ prog(PT("m_tr")+" 2/4");
  const B=await ask({P:PUZZLES.slice(0,cut).map(p=>({q:p.q,o:p.o}))},r=>ok(r,0,cut));
  if(!B)return false;
- prog("Translating… 3/4");
+ prog(PT("m_tr")+" 3/4");
  const C=await ask({P:PUZZLES.slice(cut).map(p=>({q:p.q,o:p.o}))},r=>ok(r,cut,N));
  if(!C)return false;
  const r={UI:A.UI,G:A.G,P:[...B.P,...C.P]};
  store(c,r);try{localStorage.setItem("tr2:"+c,JSON.stringify(r))}catch(_){}
  return true}
+let trTimer=0;
+function trShow(t,bad){const b=$("tr");clearTimeout(trTimer);b.classList.toggle("bad",!!bad);$("trt").textContent=t;b.classList.remove("hide")}
+function trHide(ms){clearTimeout(trTimer);trTimer=setTimeout(()=>$("tr").classList.add("hide"),ms||0)}
 const onLang=async e=>{
- const c=e.target.value,all=document.querySelectorAll(".lsel");all.forEach(x=>x.disabled=true);
- const ok=await loadLang(c);all.forEach(x=>x.disabled=false);
- if(ok){lang=c;D.lang=c;persist();try{localStorage.setItem("lang",c)}catch(_){}applyLang()}
- else{applyLang();$("sub").textContent="Couldn’t load that language. "+(ERRTXT[lastErr]||"Please try again.")}
+ const c=e.target.value,all=document.querySelectorAll(".lsel"),t0=Date.now();
+ const label=c==="en"?"English":((e.target.options[e.target.selectedIndex]||{}).textContent||c);
+ all.forEach(x=>x.disabled=true);
+ if(c!=="en")trShow(PT("m_tr")+" "+label);
+ let ok=false;
+ try{ok=await loadLang(c)}catch(_){ok=false}
+ const wait=c==="en"?0:700-(Date.now()-t0);if(wait>0)await new Promise(r=>setTimeout(r,wait));
+ all.forEach(x=>x.disabled=false);
+ if(ok){lang=c;D.lang=c;persist();try{localStorage.setItem("lang",c)}catch(_){}applyLang();trHide(c==="en"?0:200)}
+ else{applyLang();const m=PT("m_fail")+" "+erTxt(lastErr);$("sub").textContent=m;trShow(m,true);trHide(4500)}
 };
 document.querySelectorAll(".lsel").forEach(x=>x.onchange=onLang);
 {const x=(navigator.language||"en").slice(0,2),nl=x==="nb"||x==="nn"?"no":x;if(UI[nl])lang=nl;try{const s=localStorage.getItem("lang");if(s&&UI[s])lang=s}catch(_){}}
@@ -500,7 +617,7 @@ document.querySelectorAll(".lsel").forEach(x=>x.onchange=onLang);
 /* To turn on real Google / Apple sign-in, fill these in (see notes). */
 const AUTH_CONFIG={googleClientId:"1069541751577-v03iic76i80ftfit75mjsebf5nonigmp.apps.googleusercontent.com",appleClientId:"",appleRedirectUri:""};
 /* Show the Google/Apple buttons even before they are configured (design preview). Set to false to hide unconfigured buttons. */
-const SHOW_PREVIEW=true;
+const SHOW_PREVIEW=false;
 const main=document.querySelector("main");
 function blank(){return{i:0,coins:0,lang:"",name:"",st:{answered:0,correct:0,first:0,streak:0,best:0,pics:0}}}
 let uid=null,D=blank(),authMode="create";
@@ -551,9 +668,9 @@ function profane(leet,sq,base){
  if(PROF_SUB.some(w=>forms.some(f=>f.includes(w)||(PROF_REV.includes(w)&&rv(f).includes(w)))))return true;
  return leet.split(/[^a-z]+/).filter(Boolean).some(t=>[t,c1(t)].some(x=>PROF_TOK.includes(x)||PROF_TOK.includes(rv(x))))}
 function nameCheck(n){
- if(n.length<3||n.length>20)return "Username must be 3–20 characters.";
- if(!/^[\p{L}\p{N}][\p{L}\p{N} ._-]*$/u.test(n))return "Use only letters, numbers, spaces, . _ or -.";
- if(badWord(n))return "That username isn’t allowed. Please pick a kind one: no hateful or discriminatory names.";
+ if(n.length<3||n.length>20)return PT("n_len");
+ if(!/^[\p{L}\p{N}][\p{L}\p{N} ._-]*$/u.test(n))return PT("n_chars");
+ if(badWord(n))return PT("n_bad");
  return ""}
 const err=m=>{$("aerr").textContent=m||"";return false};
 
@@ -590,16 +707,16 @@ $("af").onsubmit=async e=>{
  e.preventDefault();err("");
  const email=$("aemail").value.trim().toLowerCase(),pw=$("apw").value,name=$("aname").value.trim();
  if(!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email))return err(CH("e_email"));
- if(!(window.crypto&&crypto.subtle))return err("Email sign-in isn’t available in this browser.");
+ if(!(window.crypto&&crypto.subtle))return err(PT("x_crypto"));
  const U=users(),id="email:"+email,btn=$("asubmit");btn.disabled=true;
  try{
   if(authMode==="create"){
    const ne=nameCheck(name);if(ne)return err(ne);
    if(pw.length<8)return err(CH("e_pw"));
-   if(U[id])return err("That email already has an account. Try logging in.");
+   if(U[id])return err(PT("x_exists"));
    const h=await hashPw(pw);
    U[id]={id,provider:"email",name,email,salt:h.salt,hash:h.hash,created:Date.now()};
-   if(!saveUsers(U))return err("Couldn’t save the account on this device. Is private browsing on?");
+   if(!saveUsers(U))return err(PT("x_save"));
    enter(id);offerPic()
   }else{
    const u=U[id],bad=CH("e_bad");
@@ -607,7 +724,7 @@ $("af").onsubmit=async e=>{
    const h=await hashPw(pw,u.salt);
    if(h.hash!==u.hash)return err(bad);
    enter(id)}
- }catch(_){err("Something went wrong. Please try again.")}
+ }catch(_){err(PT("x_wrong"))}
  finally{btn.disabled=false}};
 
 function social(provider,sub,name,email){
@@ -617,34 +734,34 @@ function social(provider,sub,name,email){
   else if(!name||nameCheck(name))name="Player";
   U[id]={id,provider,name,email:email||"",created:Date.now()}}
  else if(name&&!U[id].name)U[id].name=name;
- if(!saveUsers(U))return err("Couldn’t save the account on this device. Is private browsing on?");
+ if(!saveUsers(U))return err(PT("x_save"));
  enter(id);if(isNew&&authMode==="create")offerPic()}
 function loadScript(src){return new Promise((res,rej)=>{const s=document.createElement("script"),t=setTimeout(()=>rej(new Error("timeout")),8000);s.src=src;s.async=true;s.onload=()=>{clearTimeout(t);res()};s.onerror=()=>{clearTimeout(t);rej(new Error("load"))};document.head.appendChild(s)})}
 function hideProv(id){const b=$(id);if(b)b.classList.add("hide");const any=!$("bg").classList.contains("hide")||!$("ba").classList.contains("hide");const o=document.querySelector("#auth .or");if(o)o.classList.toggle("hide",!any)}
-let socialReady=false;
+let socialReady=false,gBlocked=false;
 function preloadSocial(){
  if(socialReady)return;socialReady=true;
  if(!AUTH_CONFIG.googleClientId&&!SHOW_PREVIEW)hideProv("bg");
  if(!AUTH_CONFIG.appleClientId&&!SHOW_PREVIEW)hideProv("ba");
- if(AUTH_CONFIG.googleClientId)loadScript("https://accounts.google.com/gsi/client").catch(()=>hideProv("bg"));
+ if(AUTH_CONFIG.googleClientId)loadScript("https://accounts.google.com/gsi/client").catch(()=>{gBlocked=true});
  if(AUTH_CONFIG.appleClientId)loadScript("https://appleid.cdn-apple.com/appleauth/static/jsapi/appleid/1/en_US/appleid.auth.js").then(()=>{
   AppleID.auth.init({clientId:AUTH_CONFIG.appleClientId,scope:"name email",redirectURI:AUTH_CONFIG.appleRedirectUri||location.origin+location.pathname,state:"uc",usePopup:true})}).catch(()=>hideProv("ba"))}
 $("bg").onclick=()=>{
  err("");
- if(!AUTH_CONFIG.googleClientId)return err("Google sign-in isn’t set up yet.");
+ if(!AUTH_CONFIG.googleClientId)return err(PT("x_gsetup"));
  if(authMode==="create"){const ne=nameCheck($("aname").value.trim());if(ne)return err(ne)}
- if(!(window.google&&google.accounts&&google.accounts.oauth2))return err("Google is still loading. Try again in a moment.");
+ if(!(window.google&&google.accounts&&google.accounts.oauth2))return err(PT(gBlocked?"x_gblock":"x_gload"));
  try{google.accounts.oauth2.initTokenClient({client_id:AUTH_CONFIG.googleClientId,scope:"openid email profile",
-  callback:async r=>{try{if(!r.access_token)throw 0;const p=await(await fetch("https://www.googleapis.com/oauth2/v3/userinfo",{headers:{Authorization:"Bearer "+r.access_token}})).json();if(!p.sub)throw 0;social("google",p.sub,p.name||p.given_name,p.email)}catch(_){err("Google sign-in didn’t work. Please try again.")}},
-  error_callback:()=>{}}).requestAccessToken()}catch(_){err("Google sign-in didn’t work. Please try again.")}};
+  callback:async r=>{try{if(!r.access_token)throw 0;const p=await(await fetch("https://www.googleapis.com/oauth2/v3/userinfo",{headers:{Authorization:"Bearer "+r.access_token}})).json();if(!p.sub)throw 0;social("google",p.sub,p.name||p.given_name,p.email)}catch(_){err(PT("x_gfail"))}},
+  error_callback:()=>{}}).requestAccessToken()}catch(_){err(PT("x_gfail"))}};
 $("ba").onclick=async()=>{
  err("");
- if(!AUTH_CONFIG.appleClientId)return err("Apple sign-in isn’t set up yet.");
+ if(!AUTH_CONFIG.appleClientId)return err(PT("x_asetup"));
  if(authMode==="create"){const ne=nameCheck($("aname").value.trim());if(ne)return err(ne)}
- if(!window.AppleID)return err("Apple is still loading. Try again in a moment.");
+ if(!window.AppleID)return err(PT("x_aload"));
  try{const r=await AppleID.auth.signIn(),p=parseJwt(r.authorization.id_token),n=r.user&&r.user.name?[r.user.name.firstName,r.user.name.lastName].filter(Boolean).join(" "):"";
   if(!p.sub)throw 0;social("apple",p.sub,n,(r.user&&r.user.email)||p.email)}
- catch(e){if(e&&e.error==="popup_closed_by_user")return;err("Apple sign-in didn’t work. Please try again.")}};
+ catch(e){if(e&&e.error==="popup_closed_by_user")return;err(PT("x_afail"))}};
 
 let statsOpen=false,statsPushed=false;
 function popStats(){if(statsPushed){statsPushed=false;try{history.back()}catch(_){}}}
